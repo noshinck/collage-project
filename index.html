@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presidency University | Campus Navigator</title>
+    
+    <!-- Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Icons: Lucide -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Animation: GSAP + ScrollTrigger -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: '#4F46E5',   // Indigo 600
+                        primaryDark: '#4338CA', // Indigo 700
+                        secondary: '#8B5CF6', // Violet 500
+                        accent: '#F59E0B',    // Amber 500
+                        success: '#10B981',   // Emerald 500
+                        alert: '#EF4444',     // Red 500
+                        surface: '#FFFFFF',
+                        bg: '#F8FAFC',        // Slate 50
+                        dark: '#0F172A',      // Slate 900
+                        subtle: '#64748B',    // Slate 500
+                    },
+                    boxShadow: {
+                        'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
+                        'premium': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01)',
+                        'premium-hover': '0 25px 50px -12px rgba(79, 70, 229, 0.15)',
+                    },
+                    backgroundImage: {
+                        'grid-pattern': "linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)",
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            background-color: #F8FAFC;
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Glassmorphism Utilities */
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .glass-dark {
+            background: rgba(15, 23, 42, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Animated Mesh Gradient Background */
+        .mesh-gradient {
+            background-color: #F8FAFC;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(79, 70, 229, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
+        }
+
+        /* Map Grid Layout */
+        .campus-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-template-rows: repeat(3, 1fr);
+            gap: 1rem;
+            aspect-ratio: 1/1;
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .waterfall-zone {
+            grid-column: 2;
+            grid-row: 2;
+            background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+            border-radius: 50%;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 40px rgba(37, 99, 235, 0.3);
+            border: 4px solid rgba(255,255,255,0.8);
+            z-index: 10;
+        }
+        
+        .water-flow {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: repeating-linear-gradient(
+                0deg,
+                rgba(255,255,255,0.1) 0px,
+                rgba(255,255,255,0.1) 2px,
+                transparent 2px,
+                transparent 10px
+            );
+            animation: flow 1.5s linear infinite;
+        }
+
+        @keyframes flow { from { background-position: 0 0; } to { background-position: 0 20px; } }
+
+        /* Building Card Styles - Professional */
+        .building-card {
+            background: white;
+            border-radius: 1rem;
+            position: relative;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            cursor: pointer;
+            border: 1px solid #E2E8F0;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+        
+        .building-card:hover {
+            border-color: #818CF8;
+            transform: translateY(-4px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            z-index: 20;
+        }
+
+        .pin-pulse { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
+        @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 0.8; } 80%, 100% { transform: scale(2); opacity: 0; } }
+
+        /* Utility classes for GSAP */
+        .gsap-reveal { opacity: 0; transform: translateY(20px); }
+        .blueprint-grid { background-size: 40px 40px; }
+    </style>
+</head>
+<body class="text-slate-600 font-sans antialiased mesh-gradient min-h-screen">
+
+    <div id="app" class="relative min-h-screen flex flex-col">
+        
+        <!-- ====================
+             VIEW: SPLASH SCREEN
+             ==================== -->
+        <div id="splash-view" class="fixed inset-0 bg-dark z-50 flex flex-col items-center justify-center text-white">
+            <div class="mb-8 relative">
+                <div class="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(79,70,229,0.5)]">
+                    <i data-lucide="compass" class="w-10 h-10 text-white animate-spin-slow"></i>
+                </div>
+            </div>
+            <h1 class="text-3xl font-bold tracking-tight mb-2">Campus Navigator</h1>
+            <p class="text-slate-400 font-medium">Presidency University</p>
+        </div>
+
+        <!-- ====================
+             VIEW: PROFESSIONAL LANDING
+             ==================== -->
+        <div id="auth-view" class="hidden min-h-screen flex flex-col">
+            <!-- Navbar -->
+            <nav class="sticky top-0 z-40 glass-panel border-b border-white/20">
+                <div class="container mx-auto px-6 h-20 flex justify-between items-center">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-primary text-white p-2 rounded-lg shadow-lg shadow-primary/30">
+                            <i data-lucide="compass" class="w-5 h-5"></i>
+                        </div>
+                        <span class="font-bold text-xl text-slate-900 tracking-tight">Navigator</span>
+                    </div>
+                    <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
+                        <a href="#" class="hover:text-primary transition-colors">Features</a>
+                        <a href="#" class="hover:text-primary transition-colors">How it Works</a>
+                        <a href="#" class="hover:text-primary transition-colors">Reviews</a>
+                    </div>
+                    <button class="text-sm font-semibold text-slate-500 hover:text-slate-900">Student Support</button>
+                </div>
+            </nav>
+
+            <!-- Hero Section -->
+            <div class="flex-1 flex items-center justify-center relative overflow-hidden py-16 md:py-24">
+                <div class="container mx-auto px-6 relative z-10">
+                    <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
+                        
+                        <!-- Left Content -->
+                        <div class="md:w-1/2 text-center md:text-left">
+                            <div class="gsap-reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-primary text-xs font-bold uppercase tracking-wider mb-6">
+                                <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
+                                v2.0 Platform Live
+                            </div>
+                            <h1 class="gsap-reveal text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
+                                Campus navigation, <br/>
+                                <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">reimagined.</span>
+                            </h1>
+                            <p class="gsap-reveal text-lg text-slate-500 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
+                                The intelligent map for Presidency University. Locate guards, find empty study spots, and navigate complex building layouts with real-time community data.
+                            </p>
+                            
+                            <!-- Login Card -->
+                            <div class="gsap-reveal bg-white p-2 rounded-2xl shadow-premium border border-slate-100 max-w-sm mx-auto md:mx-0">
+                                <form id="login-form" class="flex flex-col gap-2">
+                                    <div class="relative group">
+                                        <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary"></i>
+                                        <input type="text" id="username-input" placeholder="Enter Student ID" required
+                                            class="w-full pl-12 pr-4 py-3.5 bg-slate-50 rounded-xl border border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400">
+                                    </div>
+                                    <button type="submit" class="w-full bg-slate-900 text-white font-bold text-base py-3.5 rounded-xl shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 hover:translate-y-[-1px] active:translate-y-[1px] transition-all flex justify-center items-center gap-2">
+                                        Launch App <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- Right Visual (Abstract Interface) -->
+                        <div class="md:w-1/2 relative w-full max-w-lg">
+                            <div class="gsap-reveal absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-[80px] -z-10"></div>
+                            
+                            <!-- Floating Glass Cards Mockup -->
+                            <div class="relative min-h-[400px]">
+                                <!-- Back Card -->
+                                <div class="gsap-card absolute top-0 right-0 w-64 p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10">
+                                    <div class="flex items-center gap-3 mb-3">
+                                        <div class="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center text-primary"><i data-lucide="shield" class="w-5 h-5"></i></div>
+                                        <div>
+                                            <div class="text-xs font-bold text-slate-900">Guard Alert</div>
+                                            <div class="text-[10px] text-slate-500">2 min ago • Main Block</div>
+                                        </div>
+                                    </div>
+                                    <div class="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+                                        <div class="h-full w-2/3 bg-primary rounded-full"></div>
+                                    </div>
+                                </div>
+
+                                <!-- Front Card -->
+                                <div class="gsap-card absolute top-20 left-4 w-72 p-6 rounded-2xl bg-white shadow-premium border border-slate-100 z-20">
+                                    <div class="flex justify-between items-start mb-6">
+                                        <div>
+                                            <h3 class="font-bold text-slate-900">Explorer Rank</h3>
+                                            <p class="text-xs text-slate-500">Weekly Leaderboard</p>
+                                        </div>
+                                        <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded">Top 5%</span>
+                                    </div>
+                                    <div class="space-y-4">
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs">1</div>
+                                            <div class="flex-1">
+                                                <div class="h-2 w-24 bg-slate-100 rounded mb-1"></div>
+                                                <div class="h-2 w-16 bg-slate-50 rounded"></div>
+                                            </div>
+                                            <div class="text-xs font-bold text-primary">1,240 pts</div>
+                                        </div>
+                                        <div class="flex items-center gap-3">
+                                            <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-primary bg-indigo-50 border border-indigo-100">2</div>
+                                            <div class="flex-1">
+                                                <div class="h-2 w-20 bg-slate-200 rounded mb-1"></div>
+                                                <div class="h-2 w-12 bg-slate-100 rounded"></div>
+                                            </div>
+                                            <div class="text-xs font-bold text-slate-900">You</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 1: Features -->
+            <div class="bg-white border-y border-slate-100 py-24">
+                <div class="container mx-auto px-6">
+                    <div class="grid md:grid-cols-3 gap-8">
+                        <div class="gsap-feature p-6 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 transition-all hover:shadow-premium group">
+                            <div class="w-12 h-12 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i data-lucide="map" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Interactive Mapping</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed">Detailed floor-by-floor layouts of all 8 campus buildings.</p>
+                        </div>
+                        <div class="gsap-feature p-6 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 transition-all hover:shadow-premium group">
+                            <div class="w-12 h-12 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i data-lucide="users" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Crowdsourced Intel</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed">Real-time reports on guard locations, events, and cafeteria queues.</p>
+                        </div>
+                        <div class="gsap-feature p-6 rounded-2xl bg-slate-50 hover:bg-white border border-transparent hover:border-slate-200 transition-all hover:shadow-premium group">
+                            <div class="w-12 h-12 rounded-lg bg-amber-100 text-amber-600 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
+                                <i data-lucide="award" class="w-6 h-6"></i>
+                            </div>
+                            <h3 class="text-lg font-bold text-slate-900 mb-2">Merit System</h3>
+                            <p class="text-sm text-slate-500 leading-relaxed">Earn reputation points for accurate reports. Climb the ranks.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: How It Works -->
+            <div class="py-24 relative overflow-hidden bg-slate-50" id="section-steps">
+                <div class="container mx-auto px-6 relative z-10">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-slate-900 mb-4">How it works</h2>
+                        <p class="text-slate-500 max-w-xl mx-auto">Seamless navigation in 4 simple steps.</p>
+                    </div>
+
+                    <div class="relative">
+                        <div class="hidden md:block absolute top-12 left-0 w-full h-0.5 bg-slate-200 z-0">
+                            <div id="step-line" class="h-full bg-primary origin-left scale-x-0 w-full"></div>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                            <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
+                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-2xl font-bold text-primary">1</span>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-slate-900">Login</h3>
+                                <p class="text-sm text-slate-500">Use your university ID to access the secure map.</p>
+                            </div>
+                            <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
+                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-2xl font-bold text-primary">2</span>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-slate-900">Locate</h3>
+                                <p class="text-sm text-slate-500">Select any building to view detailed floor plans.</p>
+                            </div>
+                            <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
+                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-2xl font-bold text-primary">3</span>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-slate-900">Report</h3>
+                                <p class="text-sm text-slate-500">Drop pins for guards, food, or empty seats.</p>
+                            </div>
+                            <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
+                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-2xl font-bold text-primary">4</span>
+                                </div>
+                                <h3 class="font-bold text-lg mb-2 text-slate-900">Earn</h3>
+                                <p class="text-sm text-slate-500">Get points and badges for your contributions.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 3: Live Pulse -->
+            <div class="py-24 bg-white overflow-hidden" id="section-pulse">
+                <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
+                    <div class="md:w-1/3">
+                        <div class="gsap-pulse-text">
+                            <span class="text-emerald-500 font-bold tracking-wider text-xs uppercase mb-2 block">Live Activity</span>
+                            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">The campus pulse, <br>in real-time.</h2>
+                            <p class="text-slate-500 mb-8 leading-relaxed">See what's happening across campus right now. From quiet study corners to cafeteria rush hours.</p>
+                            <div class="flex items-center gap-4">
+                                <div class="flex -space-x-3">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
+                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
+                                </div>
+                                <span class="text-sm font-bold text-slate-700">Join 150+ students online</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="md:w-2/3 perspective-1000">
+                        <div id="feed-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-hidden relative p-4" style="transform-style: preserve-3d; transform: rotateX(10deg) rotateY(-10deg);">
+                            <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center">
+                                <div class="bg-red-100 p-2 rounded-lg text-red-600"><i data-lucide="shield-alert" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-bold text-slate-900">Guard at Gate 2</p><p class="text-xs text-slate-500">Reported 2m ago</p></div>
+                            </div>
+                            <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center md:translate-y-8">
+                                <div class="bg-blue-100 p-2 rounded-lg text-blue-600"><i data-lucide="info" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-bold text-slate-900">Library 3rd Floor Quiet</p><p class="text-xs text-slate-500">Reported 5m ago</p></div>
+                            </div>
+                            <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center">
+                                <div class="bg-amber-100 p-2 rounded-lg text-amber-600"><i data-lucide="coffee" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-bold text-slate-900">Canteen Full</p><p class="text-xs text-slate-500">Reported 8m ago</p></div>
+                            </div>
+                            <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center md:translate-y-8">
+                                <div class="bg-purple-100 p-2 rounded-lg text-purple-600"><i data-lucide="star" class="w-5 h-5"></i></div>
+                                <div><p class="text-sm font-bold text-slate-900">Tech Club Meetup</p><p class="text-xs text-slate-500">Starting in 10m</p></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 4: Testimonials -->
+            <div class="py-24 bg-slate-50 border-t border-slate-200">
+                <div class="container mx-auto px-6">
+                    <div class="text-center mb-16">
+                        <h2 class="text-3xl font-bold text-slate-900">Student Voices</h2>
+                    </div>
+                    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div class="gsap-review-left bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                            <div class="flex gap-1 text-amber-400 mb-4">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                            <p class="text-slate-600 italic mb-6">"Finally, I don't have to walk all the way to the canteen just to see it's full. This app saves me so much time between classes."</p>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-primary">R</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Rahul S.</h4>
+                                    <span class="text-xs text-slate-400">Computer Science, Year 3</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="gsap-review-right bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
+                            <div class="flex gap-1 text-amber-400 mb-4">
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
+                            </div>
+                            <p class="text-slate-600 italic mb-6">"The guard tracking is a lifesaver when I'm running late. The interface is super clean and feels very professional."</p>
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center font-bold text-pink-600">P</div>
+                                <div>
+                                    <h4 class="font-bold text-slate-900 text-sm">Priya M.</h4>
+                                    <span class="text-xs text-slate-400">Architecture, Year 2</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 5: CTA -->
+            <div class="py-32 bg-slate-900 relative overflow-hidden flex items-center justify-center text-center">
+                <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                <div class="gsap-cta-circle absolute w-[800px] h-[800px] bg-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
+                
+                <div class="container mx-auto px-6 relative z-10">
+                    <div class="gsap-cta-content max-w-2xl mx-auto">
+                        <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-8 tracking-tight">Ready to navigate smarter?</h2>
+                        <p class="text-slate-400 text-lg mb-10">Join the thousands of students using Navigator today.</p>
+                        <button onclick="document.getElementById('username-input').focus(); document.querySelector('form').scrollIntoView({behavior: 'smooth'})" 
+                            class="bg-white text-slate-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-50 hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.3)]">
+                            Get Started Now
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ====================
+             VIEW: MAIN DASHBOARD
+             ==================== -->
+        <div id="dashboard-view" class="hidden flex-1 flex flex-col pb-24 md:pb-0">
+            <!-- Header -->
+            <header class="glass-panel sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-white/20">
+                <div class="flex items-center gap-3">
+                    <div class="bg-primary/10 p-2 rounded-lg text-primary">
+                        <i data-lucide="compass" class="w-5 h-5 animate-[spin_10s_linear_infinite]"></i>
+                    </div>
+                    <div>
+                        <h2 class="font-bold text-slate-900 text-sm leading-tight">Presidency</h2>
+                        <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 uppercase tracking-wide">
+                            <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Live
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="flex items-center gap-4">
+                    <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
+                        <span class="text-amber-500">🪙</span> 
+                        <span id="user-points-display" class="font-bold text-slate-700 text-sm">0</span>
+                    </div>
+                    <div id="user-avatar" class="w-9 h-9 bg-slate-900 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer ring-2 ring-white">U</div>
+                </div>
+            </header>
+
+            <!-- Main Content Area -->
+            <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 relative">
+                <!-- Dynamic Content Injected Here -->
+            </main>
+
+            <!-- Bottom Navigation -->
+            <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-8 z-40 border border-white/10">
+                <button onclick="router.navigate('map')" class="nav-btn active flex flex-col items-center gap-1 text-primary-300 transition-all hover:text-white">
+                    <i data-lucide="map" class="w-5 h-5"></i>
+                </button>
+                <button onclick="router.navigate('leaderboard')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition-all hover:text-white">
+                    <i data-lucide="trophy" class="w-5 h-5"></i>
+                </button>
+                <button onclick="router.navigate('profile')" class="nav-btn flex flex-col items-center gap-1 text-slate-400 transition-all hover:text-white">
+                    <i data-lucide="user" class="w-5 h-5"></i>
+                </button>
+            </nav>
+        </div>
+
+        <!-- ====================
+             COMPONENTS
+             ==================== -->
+        <div id="toast-container" class="fixed top-20 right-6 z-50 pointer-events-none flex flex-col gap-2"></div>
+        <div id="modal-overlay" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+            <div id="modal-content" class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"></div>
+        </div>
+
+    </div>
+
+    <script>
+        gsap.registerPlugin(ScrollTrigger);
+
+        // DATA CONFIG
+        const BUILDINGS = [
+            { id: 1, name: 'Main Block', icon: 'building', color: 'bg-indigo-100 text-indigo-600', floors: 5, gridArea: '1 / 2 / 2 / 3', img: 'photo-1581094794329-c8112a89af12' },
+            { id: 2, name: 'Science Wing', icon: 'flask-conical', color: 'bg-emerald-100 text-emerald-600', floors: 4, gridArea: '2 / 1 / 3 / 2', img: 'photo-1503387762-592deb58ef4e' },
+            { id: 3, name: 'Library', icon: 'book-open', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4', img: 'photo-1555679427-1f6dfcce943b' },
+            { id: 4, name: 'Admin Block', icon: 'briefcase', color: 'bg-violet-100 text-violet-600', floors: 2, gridArea: '3 / 2 / 4 / 3', img: 'photo-1481253127861-534498168948' },
+            { id: 5, name: 'Canteen', icon: 'coffee', color: 'bg-rose-100 text-rose-600', floors: 1, gridArea: '1 / 1 / 2 / 2', img: 'photo-1422015347944-9dd46d16bd0b' },
+            { id: 6, name: 'Auditorium', icon: 'mic-2', color: 'bg-red-100 text-red-600', floors: 2, gridArea: '1 / 3 / 2 / 4', img: 'photo-1517457373958-b7bdd4587205' },
+            { id: 7, name: 'Sports Complex', icon: 'dumbbell', color: 'bg-cyan-100 text-cyan-600', floors: 2, gridArea: '3 / 1 / 4 / 2', img: 'photo-1534438327276-14e5300c3a48' },
+            { id: 8, name: 'Hostel', icon: 'home', color: 'bg-slate-100 text-slate-600', floors: 6, gridArea: '3 / 3 / 4 / 4', img: 'photo-1555854877-bab0e564b8d5' },
+        ];
+
+        const PIN_TYPES = [
+            { type: 'guard', label: 'Guard', icon: 'shield-alert', color: 'bg-red-500', text: 'text-red-500' },
+            { type: 'info', label: 'Info', icon: 'info', color: 'bg-blue-500', text: 'text-blue-500' },
+            { type: 'seating', label: 'Seats', icon: 'armchair', color: 'bg-emerald-500', text: 'text-emerald-500' },
+            { type: 'food', label: 'Food', icon: 'pizza', color: 'bg-orange-500', text: 'text-orange-500' },
+            { type: 'charging', label: 'Power', icon: 'zap', color: 'bg-yellow-500', text: 'text-yellow-500' },
+            { type: 'event', label: 'Event', icon: 'star', color: 'bg-violet-500', text: 'text-violet-500' }
+        ];
+
+        // SEED DATA: Default Security Guards
+        const SEED_PINS = [
+            { id: 'g1', type: 'guard', bId: 1, floor: 1, x: 25, y: 75, author: 'Admin', timestamp: Date.now() },
+            { id: 'g2', type: 'guard', bId: 1, floor: 1, x: 80, y: 20, author: 'Admin', timestamp: Date.now() },
+            { id: 'g3', type: 'guard', bId: 2, floor: 1, x: 50, y: 90, author: 'Admin', timestamp: Date.now() },
+            { id: 'g4', type: 'guard', bId: 1, floor: 2, x: 40, y: 40, author: 'Admin', timestamp: Date.now() },
+            { id: 'g5', type: 'info', bId: 1, floor: 1, x: 50, y: 50, author: 'Admin', timestamp: Date.now() }, // Info desk
+        ];
+
+        // STATE MANAGEMENT
+        const state = {
+            user: JSON.parse(localStorage.getItem('campusNavUser')) || null,
+            pins: JSON.parse(localStorage.getItem('campusNavPins')) || SEED_PINS,
+            points: parseInt(localStorage.getItem('campusNavPoints')) || 0,
+        };
+
+        const saveState = () => {
+            if (state.user) localStorage.setItem('campusNavUser', JSON.stringify(state.user));
+            localStorage.setItem('campusNavPins', JSON.stringify(state.pins));
+            localStorage.setItem('campusNavPoints', state.points.toString());
+        };
+
+        // UI HELPERS
+        const UI = {
+            toast: (message, type = 'success') => {
+                const container = document.getElementById('toast-container');
+                const el = document.createElement('div');
+                const borderClass = type === 'error' ? 'border-l-red-500' : 'border-l-emerald-500';
+                
+                el.className = `glass-panel pl-4 pr-6 py-3 rounded-lg shadow-lg border-l-4 ${borderClass} flex items-center gap-3 transform translate-x-full opacity-0 transition-all duration-500`;
+                el.innerHTML = `<span class="font-medium text-sm text-slate-800">${message}</span>`;
+                
+                container.appendChild(el);
+                
+                requestAnimationFrame(() => el.classList.remove('translate-x-full', 'opacity-0'));
+                setTimeout(() => {
+                    el.classList.add('translate-x-full', 'opacity-0');
+                    setTimeout(() => el.remove(), 500);
+                }, 3000);
+            },
+
+            modal: (content) => {
+                const overlay = document.getElementById('modal-overlay');
+                const container = document.getElementById('modal-content');
+                container.innerHTML = content;
+                lucide.createIcons();
+                
+                overlay.classList.remove('hidden');
+                requestAnimationFrame(() => {
+                    overlay.classList.remove('opacity-0');
+                    container.classList.remove('scale-95');
+                    container.classList.add('scale-100');
+                });
+
+                const close = () => {
+                    overlay.classList.add('opacity-0');
+                    container.classList.remove('scale-100');
+                    container.classList.add('scale-95');
+                    setTimeout(() => overlay.classList.add('hidden'), 300);
+                };
+                
+                overlay.onclick = (e) => { if (e.target === overlay) close(); };
+                return { close };
+            }
+        };
+
+        // RENDER LOGIC
+        const renderMap = () => {
+            const container = document.getElementById('main-content');
+            
+            let buildingsHTML = BUILDINGS.map(b => `
+                <div class="building-card gsap-map-item group" 
+                     style="grid-area: ${b.gridArea}"
+                     onclick="app.selectBuilding(${b.id})">
+                    <div class="w-10 h-10 ${b.color} rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
+                        <i data-lucide="${b.icon}" class="w-5 h-5"></i>
+                    </div>
+                    <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-900">${b.name}</span>
+                    <div class="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                </div>
+            `).join('');
+
+            buildingsHTML += `
+                <div class="waterfall-zone flex items-center justify-center flex-col text-white z-0">
+                    <div class="water-flow"></div>
+                    <div class="relative z-10 font-bold text-center text-[10px] uppercase tracking-widest opacity-90">Central<br>Plaza</div>
+                </div>
+            `;
+
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col">
+                    <div class="flex justify-between items-end mb-8">
+                        <div>
+                            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Campus Overview</h1>
+                            <p class="text-slate-500 text-sm font-medium">Select a zone to view floor plans</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex-1 flex items-center justify-center py-4">
+                        <div class="campus-grid relative">
+                            ${buildingsHTML}
+                            <div class="absolute inset-0 bg-gradient-to-tr from-indigo-50/50 to-transparent rounded-full blur-3xl -z-10 scale-125 pointer-events-none"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            lucide.createIcons();
+            
+            gsap.from(".gsap-map-item", {
+                duration: 0.8, scale: 0.8, opacity: 0, stagger: 0.05, ease: "power3.out"
+            });
+            gsap.from(".waterfall-zone", {
+                duration: 1.2, scale: 0, delay: 0.3, ease: "expo.out"
+            });
+        };
+
+        const renderBuildingDetail = (buildingId) => {
+            const building = BUILDINGS.find(b => b.id === buildingId);
+            const container = document.getElementById('main-content');
+            const bgImage = `https://images.unsplash.com/${building.img}?q=80&w=1200&auto=format&fit=crop`;
+            
+            let floorsHTML = '';
+            for(let i=1; i<=building.floors; i++) {
+                floorsHTML += `
+                    <button onclick="app.selectFloor(${i})" 
+                        class="flex-shrink-0 px-5 py-2 rounded-full font-semibold text-xs transition-all
+                        ${i === 1 ? 'bg-slate-900 text-white shadow-lg' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'}">
+                        Level ${i}
+                    </button>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="h-full flex flex-col">
+                    <div class="flex items-center gap-4 mb-6">
+                        <button onclick="router.navigate('map')" class="bg-white p-2 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+                            <i data-lucide="arrow-left" class="w-5 h-5 text-slate-700"></i>
+                        </button>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">
+                                ${building.name} 
+                            </h2>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-4 mb-2">
+                        ${floorsHTML}
+                    </div>
+
+                    <div id="floor-map-container" class="flex-1 bg-white rounded-2xl border border-slate-200 relative overflow-hidden cursor-crosshair shadow-sm group">
+                        
+                        <!-- Real Map Image Background -->
+                        <div class="absolute inset-0 bg-slate-100 bg-cover bg-center opacity-90 grayscale-[0.2]" 
+                             style="background-image: url('${bgImage}');">
+                        </div>
+                        
+                        <!-- Blueprint Grid Overlay -->
+                        <div class="absolute inset-0 bg-grid-pattern bg-[length:40px_40px] opacity-20 pointer-events-none"></div>
+                        <div class="absolute inset-0 bg-white/40 backdrop-blur-[1px] pointer-events-none"></div>
+
+                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-100 text-xs font-bold text-slate-500 pointer-events-none shadow-sm z-20">
+                            Level 1 Schematic
+                        </div>
+
+                        <div id="pins-layer" class="absolute inset-0 w-full h-full z-10"></div>
+                        
+                        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur text-white text-xs font-medium px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+                            Tap anywhere to report activity
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            lucide.createIcons();
+            
+            const mapContainer = document.getElementById('floor-map-container');
+            mapContainer.addEventListener('click', (e) => {
+                if(e.target.closest('.map-pin')) return;
+                const rect = mapContainer.getBoundingClientRect();
+                const x = ((e.clientX - rect.left) / rect.width) * 100;
+                const y = ((e.clientY - rect.top) / rect.height) * 100;
+                app.showAddPinModal(buildingId, 1, x, y);
+            });
+
+            app.renderPins(buildingId, 1);
+        };
+
+        const renderLeaderboard = () => {
+            const container = document.getElementById('main-content');
+            const dummyUsers = [
+                { name: 'Sarah Jenkins', points: 1250, initial: 'S' },
+                { name: 'Rahul Kumar', points: 980, initial: 'R' },
+                { name: 'Mike Tyson', points: 850, initial: 'M' },
+                { name: state.user.name, points: state.points, initial: state.user.name[0], isMe: true }
+            ].sort((a,b) => b.points - a.points);
+
+            const listHTML = dummyUsers.map((u, index) => {
+                const isMe = u.isMe ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-slate-100';
+                return `
+                <div class="gsap-rank-item flex items-center gap-4 p-4 rounded-xl mb-3 border ${isMe} transition-all hover:shadow-md">
+                    <div class="font-bold text-lg w-6 text-center text-slate-400">#${index+1}</div>
+                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600 text-sm">
+                        ${u.initial}
+                    </div>
+                    <div class="flex-1">
+                        <div class="font-bold text-slate-900 text-sm flex items-center gap-2">
+                            ${u.name} 
+                            ${u.isMe ? '<span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 rounded uppercase font-bold tracking-wider">You</span>' : ''}
+                        </div>
+                    </div>
+                    <div class="font-bold text-slate-900 bg-amber-50 text-amber-600 px-3 py-1 rounded-lg text-sm border border-amber-100">
+                        ${u.points} pts
+                    </div>
+                </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="max-w-md mx-auto">
+                    <div class="text-center mb-8">
+                        <h1 class="text-2xl font-bold text-slate-900">Leaderboard</h1>
+                        <p class="text-slate-500 text-sm">Top contributors this week</p>
+                    </div>
+                    <div class="pb-20">
+                        ${listHTML}
+                    </div>
+                </div>
+            `;
+            
+            gsap.from(".gsap-rank-item", {
+                y: 10, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out"
+            });
+        };
+
+        // CORE APP LOGIC
+        const app = {
+            init: () => {
+                setTimeout(() => {
+                    document.getElementById('splash-view').classList.add('hidden');
+                    if (state.user) {
+                        router.navigate('map');
+                        app.updateUserHeader();
+                    } else {
+                        document.getElementById('auth-view').classList.remove('hidden');
+                        app.initLandingAnimations();
+                    }
+                }, 1500);
+
+                document.getElementById('login-form').addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const username = document.getElementById('username-input').value;
+                    if(username.length < 3) return UI.toast('Please enter a valid ID', 'error');
+                    
+                    state.user = { name: username, id: Date.now().toString() };
+                    saveState();
+                    
+                    const authView = document.getElementById('auth-view');
+                    gsap.to(authView, {
+                        y: -20, opacity: 0, duration: 0.6, ease: "power3.in",
+                        onComplete: () => {
+                            authView.classList.add('hidden');
+                            router.navigate('map');
+                            app.updateUserHeader();
+                        }
+                    });
+                });
+            },
+
+            initLandingAnimations: () => {
+                const tl = gsap.timeline();
+                tl.to(".gsap-reveal", { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" })
+                  .from(".gsap-card", { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power3.out" }, "-=0.8")
+                  .from(".gsap-feature", { y: 20, opacity: 0, duration: 0.8, stagger: 0.1, ease: "power2.out" }, "-=0.5");
+
+                gsap.from("#step-line", {
+                    scaleX: 0, duration: 1.5, ease: "power2.inOut",
+                    scrollTrigger: { trigger: "#section-steps", start: "top 70%" }
+                });
+                gsap.from(".gsap-step", {
+                    y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)",
+                    scrollTrigger: { trigger: "#section-steps", start: "top 70%" }
+                });
+
+                gsap.from(".gsap-pulse-text", {
+                    x: -50, opacity: 0, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: "#section-pulse", start: "top 60%" }
+                });
+                
+                const feedItems = gsap.utils.toArray(".gsap-feed-item");
+                feedItems.forEach((item, i) => {
+                    gsap.from(item, {
+                        x: 100, opacity: 0, rotationY: -15, duration: 0.8, delay: i * 0.1, ease: "power2.out",
+                        scrollTrigger: { trigger: "#feed-container", start: "top 80%" }
+                    });
+                });
+
+                gsap.from(".gsap-review-left", {
+                    x: -100, opacity: 0, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: ".gsap-review-left", start: "top 80%" }
+                });
+                gsap.from(".gsap-review-right", {
+                    x: 100, opacity: 0, duration: 1, ease: "power3.out",
+                    scrollTrigger: { trigger: ".gsap-review-right", start: "top 80%" }
+                });
+
+                gsap.from(".gsap-cta-content", {
+                    scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.7)",
+                    scrollTrigger: { trigger: ".gsap-cta-content", start: "top 80%" }
+                });
+            },
+
+            updateUserHeader: () => {
+                document.getElementById('user-points-display').innerText = state.points;
+                document.getElementById('user-avatar').innerText = state.user.name[0].toUpperCase();
+            },
+
+            selectBuilding: (id) => {
+                gsap.to("#main-content", {
+                    opacity: 0, duration: 0.2, onComplete: () => {
+                        renderBuildingDetail(id);
+                        gsap.to("#main-content", { opacity: 1, duration: 0.4 });
+                    }
+                });
+            },
+
+            selectFloor: (floorNum) => {
+                app.renderPins(1, floorNum); 
+            },
+
+            showAddPinModal: (bId, floor, x, y) => {
+                const typesHTML = PIN_TYPES.map(t => `
+                    <button onclick="app.confirmAddPin('${t.type}', ${bId}, ${floor}, ${x}, ${y})" 
+                        class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-indigo-500 hover:bg-indigo-50 transition-all group">
+                        <div class="w-10 h-10 ${t.color} text-white rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+                            <i data-lucide="${t.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <span class="text-xs font-bold text-slate-600">${t.label}</span>
+                    </button>
+                `).join('');
+
+                const modalHTML = `
+                    <div class="p-6">
+                        <h3 class="text-lg font-bold text-slate-900 mb-1 text-center">New Report</h3>
+                        <p class="text-slate-400 text-xs text-center mb-6">Select category for this location</p>
+                        <div class="grid grid-cols-3 gap-3 mb-6">
+                            ${typesHTML}
+                        </div>
+                        <button onclick="currentModal.close()" class="w-full py-3 rounded-xl text-slate-500 text-sm font-semibold hover:bg-slate-50 transition-colors">Cancel</button>
+                    </div>
+                `;
+                window.currentModal = UI.modal(modalHTML);
+            },
+
+            confirmAddPin: (type, bId, floor, x, y) => {
+                window.currentModal.close();
+                const newPin = { id: Date.now(), type, bId, floor, x, y, author: state.user.name };
+                state.pins.push(newPin);
+                app.addPoints(10);
+                saveState();
+                app.renderPins(bId, floor);
+                UI.toast(`Report submitted successfully`);
+            },
+
+            addPoints: (amount) => {
+                state.points += amount;
+                saveState();
+                gsap.to("#user-points-display", {
+                    innerText: state.points, duration: 1, snap: { innerText: 1 }
+                });
+            },
+
+            renderPins: (bId, floor) => {
+                const layer = document.getElementById('pins-layer');
+                if(!layer) return;
+                const floorPins = state.pins.filter(p => p.bId === bId && p.floor === floor);
+                
+                layer.innerHTML = floorPins.map(p => {
+                    const pType = PIN_TYPES.find(t => t.type === p.type);
+                    const pulseClass = p.type === 'guard' ? '<div class="absolute inset-0 bg-red-500 rounded-full pin-pulse"></div>' : '';
+                    
+                    return `
+                        <div class="map-pin absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group z-20"
+                             style="left: ${p.x}%; top: ${p.y}%"
+                             onclick="UI.toast('${pType.label} report by ${p.author}')">
+                             ${pulseClass}
+                             <div class="relative w-8 h-8 ${pType.color} text-white rounded-lg flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 transition-transform">
+                                <i data-lucide="${pType.icon}" class="w-4 h-4"></i>
+                             </div>
+                        </div>
+                    `;
+                }).join('');
+                
+                lucide.createIcons();
+                gsap.from(".map-pin", { y: -20, opacity: 0, duration: 0.4, stagger: 0.05, ease: "back.out(1.5)" });
+            }
+        };
+
+        const router = {
+            navigate: (view) => {
+                const dashboard = document.getElementById('dashboard-view');
+                const main = document.getElementById('main-content');
+                
+                document.querySelectorAll('.nav-btn').forEach(btn => {
+                    btn.classList.remove('text-primary-300', 'text-white');
+                    btn.classList.add('text-slate-400');
+                });
+                
+                if(dashboard.classList.contains('hidden')) dashboard.classList.remove('hidden');
+
+                if(view === 'map') renderMap();
+                else if(view === 'leaderboard') renderLeaderboard();
+                else if(view === 'profile') {
+                    main.innerHTML = `<div class="flex h-full items-center justify-center text-slate-400 flex-col"><i data-lucide="cone" class="w-12 h-12 mb-4"></i><span>Profile Settings</span><button class="mt-4 text-red-500 text-sm font-bold" onclick="localStorage.clear(); location.reload()">Reset Local Data</button></div>`;
+                    lucide.createIcons();
+                }
+            }
+        };
+
+        window.addEventListener('DOMContentLoaded', app.init);
+    </script>
+</body>
+</html>
