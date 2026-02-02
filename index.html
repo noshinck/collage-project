@@ -17,7 +17,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
     
-    <!-- Smooth Scrolling: Lenis (Industry Standard for GSAP compatibility) -->
+    <!-- Smooth Scrolling: Lenis -->
     <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 
     <!-- Tailwind CSS -->
@@ -47,6 +47,7 @@
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
                         'premium': '0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.01)',
                         'premium-hover': '0 25px 50px -12px rgba(79, 70, 229, 0.15)',
+                        'card-normal': '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
                     },
                     backgroundImage: {
                         'grid-pattern': "linear-gradient(to right, #e2e8f0 1px, transparent 1px), linear-gradient(to bottom, #e2e8f0 1px, transparent 1px)",
@@ -68,10 +69,10 @@
 
         /* Glassmorphism Utilities */
         .glass-panel {
-            background: rgba(255, 255, 255, 0.7);
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(12px);
             -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.5);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.8);
         }
 
         /* Animated Mesh Gradient Background */
@@ -89,11 +90,12 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            gap: 1rem;
+            gap: 1.5rem;
             aspect-ratio: 1/1;
             width: 100%;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
+            padding: 1rem;
         }
 
         .waterfall-zone {
@@ -103,9 +105,12 @@
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 40px rgba(37, 99, 235, 0.3);
-            border: 4px solid rgba(255,255,255,0.8);
+            box-shadow: 0 0 50px rgba(37, 99, 235, 0.4);
+            border: 6px solid rgba(255,255,255,0.9);
             z-index: 10;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
         
         .water-flow {
@@ -113,20 +118,20 @@
             top: 0; left: 0; right: 0; bottom: 0;
             background: repeating-linear-gradient(
                 0deg,
-                rgba(255,255,255,0.1) 0px,
-                rgba(255,255,255,0.1) 2px,
+                rgba(255,255,255,0.15) 0px,
+                rgba(255,255,255,0.15) 2px,
                 transparent 2px,
-                transparent 10px
+                transparent 15px
             );
             animation: flow 1.5s linear infinite;
         }
 
-        @keyframes flow { from { background-position: 0 0; } to { background-position: 0 20px; } }
+        @keyframes flow { from { background-position: 0 0; } to { background-position: 0 30px; } }
 
-        /* Building Card Styles - Professional */
+        /* Building Card Styles - Professional & Visible */
         .building-card {
-            background: white;
-            border-radius: 1rem;
+            background-color: #FFFFFF !important;
+            border-radius: 1.25rem;
             position: relative;
             transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             cursor: pointer;
@@ -136,18 +141,21 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            z-index: 2;
+            opacity: 1 !important; /* Force visible */
+            visibility: visible !important;
         }
         
         .building-card:hover {
             border-color: #818CF8;
-            transform: translateY(-4px);
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
-            z-index: 20;
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.15), 0 10px 10px -5px rgba(79, 70, 229, 0.04);
+            z-index: 30;
         }
 
         .pin-pulse { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
-        @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 0.8; } 80%, 100% { transform: scale(2); opacity: 0; } }
+        @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 0.8; } 80%, 100% { transform: scale(2.5); opacity: 0; } }
 
         /* Utility classes for GSAP */
         .gsap-reveal { opacity: 0; transform: translateY(20px); }
@@ -168,14 +176,18 @@
         <!-- ====================
              VIEW: SPLASH SCREEN
              ==================== -->
-        <div id="splash-view" class="fixed inset-0 bg-dark z-50 flex flex-col items-center justify-center text-white">
-            <div class="mb-8 relative">
-                <div class="w-20 h-20 bg-primary rounded-2xl flex items-center justify-center shadow-[0_0_40px_rgba(79,70,229,0.5)]">
-                    <i data-lucide="compass" class="w-10 h-10 text-white animate-spin-slow"></i>
+        <div id="splash-view" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center text-white origin-top">
+            <div class="splash-logo mb-8 relative scale-0">
+                <div class="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center shadow-[0_0_60px_rgba(79,70,229,0.6)]">
+                    <i data-lucide="compass" class="w-12 h-12 text-white"></i>
                 </div>
             </div>
-            <h1 class="text-3xl font-bold tracking-tight mb-2">Campus Navigator</h1>
-            <p class="text-slate-400 font-medium">Presidency University</p>
+            <div class="overflow-hidden">
+                <h1 class="splash-text text-4xl font-extrabold tracking-tight mb-2 translate-y-full text-center">Campus Navigator</h1>
+            </div>
+            <div class="overflow-hidden">
+                <p class="splash-text text-slate-400 font-medium text-lg translate-y-full text-center">Presidency University</p>
+            </div>
         </div>
 
         <!-- ====================
@@ -224,7 +236,7 @@
                                 <form id="login-form" class="flex flex-col gap-2">
                                     <div class="relative group">
                                         <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary"></i>
-                                        <input type="text" id="username-input" placeholder="Enter Student ID" required
+                                        <input type="text" id="username-input" placeholder="Enter your Nickname" required
                                             class="w-full pl-12 pr-4 py-3.5 bg-slate-50 rounded-xl border border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400">
                                     </div>
                                     <button type="submit" class="w-full bg-slate-900 text-white font-bold text-base py-3.5 rounded-xl shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 hover:translate-y-[-1px] active:translate-y-[1px] transition-all flex justify-center items-center gap-2">
@@ -243,7 +255,6 @@
                                 <!-- Back Card -->
                                 <div class="gsap-card absolute top-0 right-0 w-64 p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10">
                                     <div class="flex items-center gap-3 mb-3">
-                                        <!-- UPDATED: Profile Picture for Guard Alert -->
                                         <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Guard">
                                         <div>
                                             <div class="text-xs font-bold text-slate-900">Guard Alert</div>
@@ -316,62 +327,50 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Features (FIXED VISIBILITY & ANIMATION) -->
-            <div id="features-section" class="bg-slate-50 py-24 relative overflow-hidden border-b border-slate-100">
-                <!-- Decorative Elements -->
-                <div class="absolute -right-20 top-40 w-96 h-96 bg-purple-100/50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
-                <div class="absolute -left-20 bottom-20 w-80 h-80 bg-blue-100/50 rounded-full blur-3xl opacity-60 pointer-events-none"></div>
+            <!-- SECTION 2: Features (MATCHING REFERENCE STYLE) -->
+            <div id="features-section" class="py-24 bg-white relative overflow-hidden">
+                <!-- Background Glow (Subtle) -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-slate-50/50 rounded-full blur-3xl -z-10"></div>
 
                 <div class="container mx-auto px-6 relative z-10">
-                    <!-- Section Header -->
-                    <div class="text-center mb-20 max-w-3xl mx-auto">
-                        <span class="gsap-feature-header inline-block py-1 px-3 rounded-full bg-white border border-slate-200 text-slate-600 text-xs font-bold uppercase tracking-wider mb-4 shadow-sm">
+                    <!-- Header -->
+                    <div class="text-center max-w-2xl mx-auto mb-16">
+                        <div class="gsap-feature-header inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-6">
                             Power Features
-                        </span>
-                        <h2 class="gsap-feature-header text-4xl md:text-5xl font-extrabold text-slate-900 mb-6 tracking-tight">
-                            Smart navigation for <br/> <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">smart students.</span>
+                        </div>
+                        <h2 class="gsap-feature-header text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-2">
+                            Smart navigation for <br/> 
+                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">smart students.</span>
                         </h2>
                     </div>
 
-                    <!-- Cards Container -->
-                    <div class="grid md:grid-cols-3 gap-8">
+                    <!-- Cards Grid -->
+                    <div class="grid md:grid-cols-3 gap-6">
                         <!-- Card 1 -->
-                        <div class="gsap-feature-card group relative bg-white p-8 rounded-[2rem] border border-slate-200 shadow-2xl shadow-slate-200/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-indigo-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div class="relative z-10 flex flex-col items-center text-center">
-                                <div class="w-20 h-20 bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-indigo-100">
-                                    <span class="text-4xl">📍</span>
-                                </div>
-                                <h3 class="text-2xl font-bold text-slate-900 mb-3">Real-Time Tracking</h3>
-                                <p class="text-slate-500 font-medium leading-relaxed">See guard locations instantly</p>
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
+                            <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <span class="text-2xl text-indigo-600">📍</span>
                             </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Real-Time Tracking</h3>
+                            <p class="text-slate-500 font-medium leading-relaxed text-sm">See guard locations instantly</p>
                         </div>
 
                         <!-- Card 2 -->
-                        <div class="gsap-feature-card group relative bg-white p-8 rounded-[2rem] border border-slate-200 shadow-2xl shadow-slate-200/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div class="relative z-10 flex flex-col items-center text-center">
-                                <div class="w-20 h-20 bg-amber-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-amber-100">
-                                    <span class="text-4xl">🏆</span>
-                                </div>
-                                <h3 class="text-2xl font-bold text-slate-900 mb-3">Earn Rewards</h3>
-                                <p class="text-slate-500 font-medium leading-relaxed">Climb leaderboards, unlock badges</p>
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
+                            <div class="w-16 h-16 mx-auto bg-amber-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <span class="text-2xl text-amber-500">🏆</span>
                             </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Earn Rewards</h3>
+                            <p class="text-slate-500 font-medium leading-relaxed text-sm">Climb leaderboards, unlock badges</p>
                         </div>
 
                         <!-- Card 3 -->
-                        <div class="gsap-feature-card group relative bg-white p-8 rounded-[2rem] border border-slate-200 shadow-2xl shadow-slate-200/50 hover:shadow-xl transition-all duration-500 hover:-translate-y-2 overflow-hidden">
-                            <div class="absolute inset-0 bg-gradient-to-br from-emerald-50/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                            
-                            <div class="relative z-10 flex flex-col items-center text-center">
-                                <div class="w-20 h-20 bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 border border-emerald-100">
-                                    <span class="text-4xl">👥</span>
-                                </div>
-                                <h3 class="text-2xl font-bold text-slate-900 mb-3">Community Powered</h3>
-                                <p class="text-slate-500 font-medium leading-relaxed">Everyone contributes, everyone benefits</p>
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
+                            <div class="w-16 h-16 mx-auto bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
+                                <span class="text-2xl text-emerald-600">👥</span>
                             </div>
+                            <h3 class="text-xl font-bold text-slate-900 mb-3">Community Powered</h3>
+                            <p class="text-slate-500 font-medium leading-relaxed text-sm">Everyone contributes, everyone benefits</p>
                         </div>
                     </div>
                 </div>
@@ -593,16 +592,16 @@
     <script>
         gsap.registerPlugin(ScrollTrigger);
 
-        // DATA CONFIG
+        // DATA CONFIG - UPDATED BUILDINGS TO MATCH MAP IMAGE
         const BUILDINGS = [
-            { id: 1, name: 'Main Block', icon: 'building', color: 'bg-indigo-100 text-indigo-600', floors: 5, gridArea: '1 / 2 / 2 / 3', img: 'photo-1581094794329-c8112a89af12' },
-            { id: 2, name: 'Science Wing', icon: 'flask-conical', color: 'bg-emerald-100 text-emerald-600', floors: 4, gridArea: '2 / 1 / 3 / 2', img: 'photo-1503387762-592deb58ef4e' },
-            { id: 3, name: 'Library', icon: 'book-open', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4', img: 'photo-1555679427-1f6dfcce943b' },
-            { id: 4, name: 'Admin Block', icon: 'briefcase', color: 'bg-violet-100 text-violet-600', floors: 2, gridArea: '3 / 2 / 4 / 3', img: 'photo-1481253127861-534498168948' },
-            { id: 5, name: 'Canteen', icon: 'coffee', color: 'bg-rose-100 text-rose-600', floors: 1, gridArea: '1 / 1 / 2 / 2', img: 'photo-1422015347944-9dd46d16bd0b' },
-            { id: 6, name: 'Auditorium', icon: 'mic-2', color: 'bg-red-100 text-red-600', floors: 2, gridArea: '1 / 3 / 2 / 4', img: 'photo-1517457373958-b7bdd4587205' },
-            { id: 7, name: 'Sports Complex', icon: 'dumbbell', color: 'bg-cyan-100 text-cyan-600', floors: 2, gridArea: '3 / 1 / 4 / 2', img: 'photo-1534438327276-14e5300c3a48' },
-            { id: 8, name: 'Hostel', icon: 'home', color: 'bg-slate-100 text-slate-600', floors: 6, gridArea: '3 / 3 / 4 / 4', img: 'photo-1555854877-bab0e564b8d5' },
+            { id: 1, name: 'School of Management', icon: 'briefcase', color: 'bg-indigo-100 text-indigo-600', floors: 4, gridArea: '1 / 1 / 2 / 2', img: 'photo-1555854877-bab0e564b8d5' },
+            { id: 2, name: 'School of Law', icon: 'scale', color: 'bg-purple-100 text-purple-600', floors: 5, gridArea: '1 / 2 / 2 / 3', img: 'photo-1581094794329-c8112a89af12' },
+            { id: 3, name: 'School of Engineering', icon: 'cpu', color: 'bg-blue-100 text-blue-600', floors: 6, gridArea: '1 / 3 / 2 / 4', img: 'photo-1481253127861-534498168948' },
+            { id: 4, name: 'Auditorium', icon: 'mic-2', color: 'bg-rose-100 text-rose-600', floors: 2, gridArea: '2 / 1 / 3 / 2', img: 'photo-1517457373958-b7bdd4587205' },
+            { id: 5, name: 'Admission Office', icon: 'building', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4', img: 'photo-1555679427-1f6dfcce943b' },
+            { id: 6, name: 'Cafeteria', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2', img: 'photo-1422015347944-9dd46d16bd0b' },
+            { id: 7, name: 'Hostel Mess', icon: 'utensils', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3', img: 'photo-1503387762-592deb58ef4e' },
+            { id: 8, name: 'Sports Field', icon: 'dumbbell', color: 'bg-teal-100 text-teal-600', floors: 1, gridArea: '3 / 3 / 4 / 4', img: 'photo-1534438327276-14e5300c3a48' },
         ];
 
         const PIN_TYPES = [
@@ -614,13 +613,16 @@
             { type: 'event', label: 'Event', icon: 'star', color: 'bg-violet-500', text: 'text-violet-500' }
         ];
 
-        // SEED DATA: Default Security Guards
+        // SEED DATA: Default Security Guards - UPDATED
         const SEED_PINS = [
-            { id: 'g1', type: 'guard', bId: 1, floor: 1, x: 25, y: 75, author: 'Admin', timestamp: Date.now() },
-            { id: 'g2', type: 'guard', bId: 1, floor: 1, x: 80, y: 20, author: 'Admin', timestamp: Date.now() },
-            { id: 'g3', type: 'guard', bId: 2, floor: 1, x: 50, y: 90, author: 'Admin', timestamp: Date.now() },
-            { id: 'g4', type: 'guard', bId: 1, floor: 2, x: 40, y: 40, author: 'Admin', timestamp: Date.now() },
-            { id: 'g5', type: 'info', bId: 1, floor: 1, x: 50, y: 50, author: 'Admin', timestamp: Date.now() }, // Info desk
+            // Guard at School of Management (Top Left)
+            { id: 'g1', type: 'guard', bId: 1, floor: 1, x: 20, y: 80, author: 'Admin', timestamp: Date.now() },
+            // Guard at School of Law (Top Center)
+            { id: 'g2', type: 'guard', bId: 2, floor: 1, x: 50, y: 90, author: 'Admin', timestamp: Date.now() },
+            // Guard at Main Entrance/Parking (Near Hostel Mess area)
+            { id: 'g3', type: 'guard', bId: 7, floor: 1, x: 50, y: 20, author: 'Admin', timestamp: Date.now() },
+            // Info desk at Admission Office
+            { id: 'g5', type: 'info', bId: 5, floor: 1, x: 50, y: 50, author: 'Admin', timestamp: Date.now() }, 
         ];
 
         // STATE MANAGEMENT
@@ -688,34 +690,34 @@
                 <div class="building-card gsap-map-item group" 
                      style="grid-area: ${b.gridArea}"
                      onclick="app.selectBuilding(${b.id})">
-                    <div class="w-10 h-10 ${b.color} rounded-lg flex items-center justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
-                        <i data-lucide="${b.icon}" class="w-5 h-5"></i>
+                    <div class="w-12 h-12 ${b.color} rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                        <i data-lucide="${b.icon}" class="w-6 h-6"></i>
                     </div>
-                    <span class="text-xs font-semibold text-slate-600 group-hover:text-slate-900">${b.name}</span>
-                    <div class="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+                    <span class="text-xs font-bold text-slate-700 text-center leading-tight group-hover:text-primary transition-colors">${b.name}</span>
+                    <div class="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-500 animate-pulse border border-white"></div>
                 </div>
             `).join('');
 
             buildingsHTML += `
                 <div class="waterfall-zone flex items-center justify-center flex-col text-white z-0">
                     <div class="water-flow"></div>
-                    <div class="relative z-10 font-bold text-center text-[10px] uppercase tracking-widest opacity-90">Central<br>Plaza</div>
+                    <div class="relative z-10 font-bold text-center text-[10px] uppercase tracking-widest opacity-90 drop-shadow-md">Central<br>Fountain</div>
                 </div>
             `;
 
             container.innerHTML = `
                 <div class="w-full h-full flex flex-col">
-                    <div class="flex justify-between items-end mb-8">
+                    <div class="flex justify-between items-end mb-6 px-2">
                         <div>
                             <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Campus Overview</h1>
                             <p class="text-slate-500 text-sm font-medium">Select a zone to view floor plans</p>
                         </div>
                     </div>
                     
-                    <div class="flex-1 flex items-center justify-center py-4">
+                    <div class="flex-1 flex items-center justify-center py-4 overflow-auto">
                         <div class="campus-grid relative">
                             ${buildingsHTML}
-                            <div class="absolute inset-0 bg-gradient-to-tr from-indigo-50/50 to-transparent rounded-full blur-3xl -z-10 scale-125 pointer-events-none"></div>
+                            <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent rounded-full blur-3xl -z-10 scale-125 pointer-events-none"></div>
                         </div>
                     </div>
                 </div>
@@ -724,10 +726,10 @@
             lucide.createIcons();
             
             gsap.from(".gsap-map-item", {
-                duration: 0.8, scale: 0.8, opacity: 0, stagger: 0.05, ease: "power3.out"
+                duration: 0.6, scale: 0.8, opacity: 0, stagger: 0.05, ease: "back.out(1.5)"
             });
             gsap.from(".waterfall-zone", {
-                duration: 1.2, scale: 0, delay: 0.3, ease: "expo.out"
+                duration: 1, scale: 0, delay: 0.2, ease: "elastic.out(1, 0.7)"
             });
         };
 
@@ -750,7 +752,7 @@
             container.innerHTML = `
                 <div class="h-full flex flex-col">
                     <div class="flex items-center gap-4 mb-6">
-                        <button onclick="router.navigate('map')" class="bg-white p-2 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors">
+                        <button onclick="router.navigate('map')" class="bg-white p-2 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors shadow-sm">
                             <i data-lucide="arrow-left" class="w-5 h-5 text-slate-700"></i>
                         </button>
                         <div>
@@ -781,7 +783,7 @@
 
                         <div id="pins-layer" class="absolute inset-0 w-full h-full z-10"></div>
                         
-                        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur text-white text-xs font-medium px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20">
+                        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur text-white text-xs font-medium px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20 shadow-lg border border-slate-100">
                             Tap anywhere to report activity
                         </div>
                     </div>
@@ -924,25 +926,20 @@
                     repeat: -1
                 });
 
-                // 3. Features Section Animation (DECOUPLED for Reliability)
-                // Trigger 1: Headers
-                gsap.from(".gsap-feature-header", {
-                    y: 30, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out",
-                    scrollTrigger: { 
-                        trigger: "#features-section", 
-                        start: "top 80%" 
+                // 3. Features Section Animation (Robust Triggers)
+                const featureTl = gsap.timeline({
+                    scrollTrigger: {
+                        trigger: "#features-section",
+                        start: "top 80%", // Triggers when top of section is 80% down viewport
                     }
                 });
 
-                // Trigger 2: Cards (Independent trigger to ensure they animate)
-                gsap.from(".gsap-feature-card", {
-                    y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)",
-                    scrollTrigger: { 
-                        trigger: ".gsap-feature-card", // Trigger on the card itself
-                        start: "top 85%" 
-                    },
-                    clearProps: "all" // CRITICAL FIX: Clears opacity after animation
-                });
+                featureTl.from(".gsap-feature-header", {
+                    y: 30, opacity: 0, duration: 0.8, stagger: 0.2, ease: "power2.out"
+                })
+                .from(".gsap-feature-card", {
+                    y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.5)"
+                }, "-=0.4");
 
                 // 4. How it Works
                 gsap.from("#step-line", {
