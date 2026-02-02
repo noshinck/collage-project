@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presidency University | Campus Navigator</title>
+    <title>Spotty | Campus Navigator</title>
     
     <!-- Fonts: Plus Jakarta Sans -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -174,16 +174,17 @@
     <div id="app" class="relative min-h-screen flex flex-col">
         
         <!-- ====================
-             VIEW: SPLASH SCREEN
+             VIEW: SPLASH SCREEN (UPDATED ANIMATION)
              ==================== -->
         <div id="splash-view" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center text-white origin-top">
-            <div class="splash-logo mb-8 relative scale-0">
-                <div class="w-24 h-24 bg-primary rounded-3xl flex items-center justify-center shadow-[0_0_60px_rgba(79,70,229,0.6)]">
-                    <i data-lucide="compass" class="w-12 h-12 text-white"></i>
+            <div class="splash-logo mb-6 relative scale-0">
+                <div class="w-28 h-28 bg-white/10 backdrop-blur-md rounded-[2rem] flex items-center justify-center shadow-[0_0_60px_rgba(255,255,255,0.1)] border border-white/20">
+                    <!-- Spotty Logo -->
+                    <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-20 h-20 object-contain drop-shadow-lg">
                 </div>
             </div>
             <div class="overflow-hidden">
-                <h1 class="splash-text text-4xl font-extrabold tracking-tight mb-2 translate-y-full text-center">Campus Navigator</h1>
+                <h1 class="splash-text text-5xl font-extrabold tracking-tight mb-2 translate-y-full text-center">Spotty</h1>
             </div>
             <div class="overflow-hidden">
                 <p class="splash-text text-slate-400 font-medium text-lg translate-y-full text-center">Presidency University</p>
@@ -198,10 +199,9 @@
             <nav class="sticky top-0 z-40 glass-panel border-b border-white/20">
                 <div class="container mx-auto px-6 h-20 flex justify-between items-center">
                     <div class="flex items-center gap-3">
-                        <div class="bg-primary text-white p-2 rounded-lg shadow-lg shadow-primary/30">
-                            <i data-lucide="compass" class="w-5 h-5"></i>
-                        </div>
-                        <span class="font-bold text-xl text-slate-900 tracking-tight">Navigator</span>
+                        <!-- Spotty Logo (mix-blend-multiply to remove white bg visual) -->
+                        <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-10 h-10 object-contain mix-blend-multiply">
+                        <span class="font-bold text-2xl text-slate-900 tracking-tight">Spotty</span>
                     </div>
                     <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600">
                         <a href="#" class="hover:text-primary transition-colors">Features</a>
@@ -255,6 +255,7 @@
                                 <!-- Back Card -->
                                 <div class="gsap-card absolute top-0 right-0 w-64 p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10">
                                     <div class="flex items-center gap-3 mb-3">
+                                        <!-- UPDATED: Profile Picture for Guard Alert -->
                                         <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Guard">
                                         <div>
                                             <div class="text-xs font-bold text-slate-900">Guard Alert</div>
@@ -526,6 +527,49 @@
                     </div>
                 </div>
             </div>
+
+            <!-- FOOTER -->
+            <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 relative z-10">
+                <div class="container mx-auto px-6">
+                    <div class="grid md:grid-cols-4 gap-12 mb-12">
+                        <div class="col-span-1 md:col-span-2">
+                            <div class="flex items-center gap-3 mb-6">
+                                <!-- Footer Logo -->
+                                <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-8 h-8 object-contain mix-blend-multiply bg-white rounded-lg p-1">
+                                <span class="font-bold text-xl text-white tracking-tight">Spotty</span>
+                            </div>
+                            <p class="text-sm leading-relaxed max-w-xs mb-6">
+                                Empowering students with real-time campus intelligence. Built for the Presidency University community.
+                            </p>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-white mb-6">Platform</h4>
+                            <ul class="space-y-4 text-sm">
+                                <li><a href="#" class="hover:text-primary transition-colors">Live Map</a></li>
+                                <li><a href="#" class="hover:text-primary transition-colors">Features</a></li>
+                                <li><a href="#" class="hover:text-primary transition-colors">Leaderboard</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div>
+                            <h4 class="font-bold text-white mb-6">Support</h4>
+                            <ul class="space-y-4 text-sm">
+                                <li><a href="#" class="hover:text-primary transition-colors">Help Center</a></li>
+                                <li><a href="#" class="hover:text-primary transition-colors">Report Issue</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+                        <p>&copy; 2026 Spotty. All rights reserved.</p>
+                        <div class="flex gap-6 mt-4 md:mt-0">
+                            <a href="#" class="hover:text-white">Privacy</a>
+                            <a href="#" class="hover:text-white">Terms</a>
+                        </div>
+                    </div>
+                </div>
+            </footer>
         </div>
 
         <!-- ====================
@@ -535,16 +579,16 @@
             <!-- Header -->
             <header class="glass-panel sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-white/20">
                 <div class="flex items-center gap-3">
-                    <!-- NEW: Back/Logout Button -->
+                    <!-- Back/Logout Button -->
                     <button onclick="app.logout()" class="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors" title="Log Out & Return Home">
                         <i data-lucide="arrow-left" class="w-5 h-5"></i>
                     </button>
 
-                    <div class="bg-primary/10 p-2 rounded-lg text-primary">
-                        <i data-lucide="compass" class="w-5 h-5 animate-[spin_10s_linear_infinite]"></i>
-                    </div>
+                    <!-- Dashboard Logo -->
+                    <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-8 h-8 object-contain mix-blend-multiply">
+                    
                     <div>
-                        <h2 class="font-bold text-slate-900 text-sm leading-tight">Presidency</h2>
+                        <h2 class="font-bold text-slate-900 text-sm leading-tight">Spotty</h2>
                         <span class="text-[10px] text-emerald-600 font-bold flex items-center gap-1 uppercase tracking-wide">
                             <span class="w-1.5 h-1.5 bg-emerald-500 rounded-full animate-pulse"></span> Live
                         </span>
