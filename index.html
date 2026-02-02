@@ -130,27 +130,27 @@
 
         /* Building Card Styles - Professional & Visible */
         .building-card {
-            background-color: #FFFFFF !important;
+            background-color: #FFFFFF;
             border-radius: 1.25rem;
             position: relative;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
-            border: 1px solid #E2E8F0;
+            border: 2px solid #E2E8F0; /* Stronger border */
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05), 0 4px 6px -2px rgba(0, 0, 0, 0.025);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Deeper shadow */
             z-index: 2;
-            opacity: 1 !important; /* Force visible */
-            visibility: visible !important;
+            /* Removed force opacity to let GSAP animate, added will-change for performance */
+            will-change: transform, opacity;
         }
         
         .building-card:hover {
             border-color: #818CF8;
-            transform: translateY(-8px);
-            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.15), 0 10px 10px -5px rgba(79, 70, 229, 0.04);
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2), 0 10px 10px -5px rgba(79, 70, 229, 0.08);
             z-index: 30;
         }
 
@@ -328,11 +328,11 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Features (VISIBILITY FIXED: GREY BACKGROUND & FASTER ANIMATION) -->
-            <div id="features-section" class="py-24 bg-slate-100 relative overflow-hidden border-b border-slate-200">
-                <!-- Subtle Texture -->
-                <div class="absolute inset-0 opacity-[0.4]" style="background-image: radial-gradient(#e5e7eb 1px, transparent 1px); background-size: 24px 24px;"></div>
-                
+            <!-- SECTION 2: Features (MATCHING REFERENCE STYLE) -->
+            <div id="features-section" class="py-24 bg-white relative overflow-hidden">
+                <!-- Background Glow (Subtle) -->
+                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-slate-50/50 rounded-full blur-3xl -z-10"></div>
+
                 <div class="container mx-auto px-6 relative z-10">
                     <!-- Header -->
                     <div class="text-center max-w-2xl mx-auto mb-16">
@@ -348,7 +348,7 @@
                     <!-- Cards Grid -->
                     <div class="grid md:grid-cols-3 gap-6">
                         <!-- Card 1 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center">
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
                             <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                 <span class="text-2xl text-indigo-600">📍</span>
                             </div>
@@ -357,7 +357,7 @@
                         </div>
 
                         <!-- Card 2 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center">
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
                             <div class="w-16 h-16 mx-auto bg-amber-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                 <span class="text-2xl text-amber-500">🏆</span>
                             </div>
@@ -366,7 +366,7 @@
                         </div>
 
                         <!-- Card 3 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-200 shadow-xl hover:shadow-2xl transition-all duration-300 hover:-translate-y-1 text-center">
+                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
                             <div class="w-16 h-16 mx-auto bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
                                 <span class="text-2xl text-emerald-600">👥</span>
                             </div>
@@ -771,14 +771,15 @@
             
             // Map Animation: Faster entrance
             gsap.from(".gsap-map-item", {
-                duration: 0.4, 
-                scale: 0.9, 
+                duration: 0.3, 
+                scale: 0.5, 
                 opacity: 0, 
-                stagger: 0.05, 
-                ease: "back.out(1.2)"
+                stagger: 0.03, 
+                ease: "back.out(1.2)",
+                clearProps: "all"
             });
             gsap.from(".waterfall-zone", {
-                duration: 1, scale: 0, delay: 0.2, ease: "elastic.out(1, 0.7)"
+                duration: 0.5, scale: 0, delay: 0.1, ease: "elastic.out(1, 0.7)"
             });
         };
 
@@ -912,7 +913,7 @@
                         document.getElementById('auth-view').classList.remove('hidden');
                         app.initLandingAnimations();
                     }
-                }, 1500);
+                }, 800); // Reduced delay for faster loading
 
                 document.getElementById('login-form').addEventListener('submit', (e) => {
                     e.preventDefault();
