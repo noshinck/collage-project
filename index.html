@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Spotty | Campus Navigator</title>
     
     <!-- Fonts: Plus Jakarta Sans -->
@@ -42,6 +42,13 @@
                         bg: '#F8FAFC',        // Slate 50
                         dark: '#0F172A',      // Slate 900
                         subtle: '#64748B',    // Slate 500
+                    },
+                    screens: {
+                        'xs': '375px',
+                        'sm': '640px',
+                        'md': '768px',
+                        'lg': '1024px',
+                        'xl': '1280px',
                     },
                     boxShadow: {
                         'glass': '0 8px 32px 0 rgba(31, 38, 135, 0.07)',
@@ -85,17 +92,24 @@
                 radial-gradient(at 0% 100%, rgba(245, 158, 11, 0.1) 0px, transparent 50%);
         }
 
-        /* Map Grid Layout */
+        /* Map Grid Layout - Responsive */
         .campus-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             grid-template-rows: repeat(3, 1fr);
-            gap: 1.5rem;
+            gap: 0.75rem; /* Mobile gap */
             aspect-ratio: 1/1;
             width: 100%;
             max-width: 900px;
             margin: 0 auto;
-            padding: 1rem;
+            padding: 0.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .campus-grid {
+                gap: 1.5rem;
+                padding: 1rem;
+            }
         }
 
         .waterfall-zone {
@@ -105,13 +119,20 @@
             border-radius: 50%;
             position: relative;
             overflow: hidden;
-            box-shadow: 0 0 50px rgba(37, 99, 235, 0.4);
-            border: 6px solid rgba(255,255,255,0.9);
+            box-shadow: 0 0 30px rgba(37, 99, 235, 0.3);
+            border: 4px solid rgba(255,255,255,0.9);
             z-index: 10;
             display: flex;
             align-items: center;
             justify-content: center;
             aspect-ratio: 1 / 1;
+        }
+
+        @media (min-width: 768px) {
+            .waterfall-zone {
+                box-shadow: 0 0 50px rgba(37, 99, 235, 0.4);
+                border-width: 6px;
+            }
         }
         
         .water-flow {
@@ -132,26 +153,41 @@
         /* Building Card Styles */
         .building-card {
             background-color: #FFFFFF;
-            border-radius: 1.25rem;
+            border-radius: 0.75rem; /* Smaller radius on mobile */
             position: relative;
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
-            border: 2px solid #E2E8F0; /* Stronger border */
+            border: 1px solid #E2E8F0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Deeper shadow */
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
             z-index: 2;
             will-change: transform, opacity;
+        }
+
+        @media (min-width: 768px) {
+            .building-card {
+                border-radius: 1.25rem;
+                border-width: 2px;
+                box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08);
+            }
         }
         
         .building-card:hover {
             border-color: #818CF8;
-            transform: translateY(-5px);
-            box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2), 0 10px 10px -5px rgba(79, 70, 229, 0.08);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -5px rgba(79, 70, 229, 0.1);
             z-index: 30;
+        }
+
+        @media (min-width: 768px) {
+            .building-card:hover {
+                transform: translateY(-5px);
+                box-shadow: 0 20px 25px -5px rgba(79, 70, 229, 0.2);
+            }
         }
 
         .pin-pulse { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
@@ -193,6 +229,14 @@
             display: block;
         }
 
+        /* Leaderboard Specifics */
+        .podium-avatar {
+            box-shadow: 0 0 0 4px #ffffff, 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .rank-1 { background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%); } /* Gold */
+        .rank-2 { background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%); } /* Silver */
+        .rank-3 { background: linear-gradient(135deg, #FDBA74 0%, #EA580C 100%); } /* Bronze */
+
         /* Smooth Scrolling (Lenis) */
         html.lenis, html.lenis body { height: auto; }
         .lenis.lenis-smooth { scroll-behavior: auto !important; }
@@ -226,53 +270,74 @@
         <!-- ====================
              VIEW: PROFESSIONAL LANDING
              ==================== -->
-        <div id="auth-view" class="hidden min-h-screen flex flex-col">
+        <div id="auth-view" class="hidden min-h-screen flex flex-col relative">
             <!-- Navbar -->
             <nav class="sticky top-0 z-40 glass-panel border-b border-white/20">
-                <div class="container mx-auto px-6 h-20 flex justify-between items-center">
-                    <div class="flex items-center gap-3">
-                        <!-- Spotty Logo (mix-blend-multiply to remove white bg visual) -->
-                        <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-10 h-10 object-contain mix-blend-multiply">
-                        <span class="font-bold text-2xl text-slate-900 tracking-tight">Spotty</span>
-                    </div>
-                    <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600 items-center">
-                        <a href="#" class="hover:text-primary transition-colors">Features</a>
-                        <a href="#" class="hover:text-primary transition-colors">How it Works</a>
-                        <a href="#" class="hover:text-primary transition-colors">Reviews</a>
-                        <!-- UPDATED: Profile Option in Landing Page Nav -->
-                        <a href="#" class="hover:text-primary transition-colors font-semibold" onclick="app.handleLandingProfileClick(event)">Profile</a>
+                <div class="container mx-auto px-6 h-16 md:h-20 flex justify-between items-center">
+                    <div class="flex items-center gap-2 md:gap-3">
+                        <!-- Spotty Logo -->
+                        <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-8 h-8 md:w-10 md:h-10 object-contain mix-blend-multiply">
+                        <span class="font-bold text-xl md:text-2xl text-slate-900 tracking-tight">Spotty</span>
                     </div>
                     
-                    <!-- NEW: Profile Icon Button -->
-                    <button onclick="app.handleLandingProfileClick(event)" class="w-10 h-10 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm group" title="Sign In">
-                        <i data-lucide="user" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
-                    </button>
+                    <!-- Desktop Menu -->
+                    <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600 items-center">
+                        <a href="#" class="hover:text-primary transition-colors">How it Works</a>
+                        <a href="#" class="hover:text-primary transition-colors">Reviews</a>
+                        <!-- Login Option calls Modal -->
+                        <a href="#" class="hover:text-primary transition-colors font-semibold" onclick="app.handleLandingProfileClick(event)">Login</a>
+                    </div>
+                    
+                    <div class="flex items-center gap-4">
+                        <!-- Profile Icon Button (Desktop) -->
+                        <button onclick="app.handleLandingProfileClick(event)" class="hidden md:flex w-10 h-10 rounded-full bg-slate-100 border border-slate-200 items-center justify-center text-slate-600 hover:bg-primary hover:text-white hover:border-primary transition-all shadow-sm group" title="Sign In">
+                            <i data-lucide="user" class="w-5 h-5 group-hover:scale-110 transition-transform"></i>
+                        </button>
+
+                        <!-- Mobile Menu Button -->
+                        <button onclick="app.toggleMobileMenu()" class="md:hidden p-2 -mr-2 text-slate-600">
+                            <i data-lucide="menu" class="w-6 h-6"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Dropdown -->
+                <div id="mobile-menu" class="hidden md:hidden absolute top-full left-0 w-full bg-white border-b border-slate-100 shadow-xl overflow-hidden transition-all duration-300 origin-top scale-y-0 opacity-0">
+                    <div class="flex flex-col p-4 gap-4">
+                        <a href="#" class="text-sm font-medium text-slate-600 hover:text-primary py-2 border-b border-slate-50">How it Works</a>
+                        <a href="#" class="text-sm font-medium text-slate-600 hover:text-primary py-2 border-b border-slate-50">Reviews</a>
+                        <a href="#" class="text-sm font-bold text-primary py-2" onclick="app.handleLandingProfileClick(event)">Login / Profile</a>
+                        <button class="w-full bg-slate-900 text-white font-bold py-3 rounded-xl text-sm" onclick="app.handleLandingProfileClick(event)">Student Support</button>
+                    </div>
                 </div>
             </nav>
 
             <!-- Hero Section -->
-            <div class="flex-1 flex items-center justify-center relative overflow-hidden py-16 md:py-24">
+            <div class="flex-1 flex items-center justify-center relative overflow-hidden py-12 md:py-24">
                 <div class="container mx-auto px-6 relative z-10">
-                    <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                        <div class="md:w-1/2 text-center md:text-left">
+                    <div class="flex flex-col md:flex-row items-center gap-10 md:gap-20">
+                        
+                        <!-- Left Content -->
+                        <div class="w-full md:w-1/2 text-center md:text-left">
                             <div class="gsap-reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-primary text-xs font-bold uppercase tracking-wider mb-6">
                                 <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
                                 v2.0 Platform Live
                             </div>
-                            <h1 class="gsap-reveal text-5xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
+                            <h1 class="gsap-reveal text-4xl md:text-6xl lg:text-7xl font-extrabold text-slate-900 leading-[1.1] mb-6 tracking-tight">
                                 Campus navigation, <br/>
                                 <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-secondary">reimagined.</span>
                             </h1>
-                            <p class="gsap-reveal text-lg text-slate-500 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
-                                The intelligent map for Presidency University. Locate guards, find empty study spots, and navigate complex building layouts with real-time community data.
+                            <p class="gsap-reveal text-base md:text-lg text-slate-500 mb-8 leading-relaxed max-w-lg mx-auto md:mx-0">
+                                The intelligent map for Presidency University. Locate guards, find empty study spots, and navigate complex building layouts.
                             </p>
                             
+                            <!-- Login Card (Inline Quick Start) -->
                             <div class="gsap-reveal bg-white p-2 rounded-2xl shadow-premium border border-slate-100 max-w-sm mx-auto md:mx-0">
                                 <form id="login-form" class="flex flex-col gap-2">
                                     <div class="relative group">
                                         <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary"></i>
                                         <input type="text" id="username-input" placeholder="Enter your Nickname" required
-                                            class="w-full pl-12 pr-4 py-3.5 bg-slate-50 rounded-xl border border-transparent focus:bg-white focus:border-primary/20 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400">
+                                            class="w-full pl-12 pr-4 py-3.5 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400">
                                     </div>
                                     <button type="submit" class="w-full bg-slate-900 text-white font-bold text-base py-3.5 rounded-xl shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 hover:translate-y-[-1px] active:translate-y-[1px] transition-all flex justify-center items-center gap-2">
                                         Launch App <i data-lucide="arrow-right" class="w-4 h-4"></i>
@@ -281,12 +346,17 @@
                             </div>
                         </div>
 
-                        <div class="md:w-1/2 relative w-full max-w-lg">
-                            <div class="gsap-reveal absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-[80px] -z-10"></div>
-                            <div class="relative min-h-[400px]">
-                                <div class="gsap-card absolute top-0 right-0 w-64 p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10">
+                        <!-- Right Visual (Abstract Interface) -->
+                        <div class="w-full md:w-1/2 relative max-w-lg mx-auto md:mx-0">
+                            <div class="gsap-reveal absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-[60px] md:blur-[80px] -z-10"></div>
+                            
+                            <!-- Floating Glass Cards Mockup -->
+                            <div class="relative min-h-[300px] md:min-h-[400px]">
+                                <!-- Back Card -->
+                                <div class="gsap-card absolute top-0 right-0 md:right-0 w-56 md:w-64 p-4 md:p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10 left-10 md:left-auto">
                                     <div class="flex items-center gap-3 mb-3">
-                                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Guard">
+                                        <!-- UPDATED: Profile Picture for Guard Alert -->
+                                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100" class="w-8 h-8 md:w-10 md:h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Guard">
                                         <div>
                                             <div class="text-xs font-bold text-slate-900">Guard Alert</div>
                                             <div class="text-[10px] text-slate-500">2 min ago • Main Block</div>
@@ -296,10 +366,12 @@
                                         <div class="h-full w-2/3 bg-primary rounded-full"></div>
                                     </div>
                                 </div>
-                                <div class="gsap-card absolute top-20 left-4 w-72 p-6 rounded-2xl bg-white shadow-premium border border-slate-100 z-20">
+
+                                <!-- Front Card -->
+                                <div class="gsap-card absolute top-16 md:top-20 left-0 md:left-4 w-64 md:w-72 p-5 md:p-6 rounded-2xl bg-white shadow-premium border border-slate-100 z-20">
                                     <div class="flex justify-between items-start mb-6">
                                         <div>
-                                            <h3 class="font-bold text-slate-900">Explorer Rank</h3>
+                                            <h3 class="font-bold text-slate-900 text-sm md:text-base">Explorer Rank</h3>
                                             <p class="text-xs text-slate-500">Weekly Leaderboard</p>
                                         </div>
                                         <span class="bg-amber-100 text-amber-700 text-xs font-bold px-2 py-1 rounded">Top 5%</span>
@@ -307,12 +379,18 @@
                                     <div class="space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs">1</div>
-                                            <div class="flex-1"><div class="h-2 w-24 bg-slate-100 rounded mb-1"></div><div class="h-2 w-16 bg-slate-50 rounded"></div></div>
+                                            <div class="flex-1">
+                                                <div class="h-2 w-24 bg-slate-100 rounded mb-1"></div>
+                                                <div class="h-2 w-16 bg-slate-50 rounded"></div>
+                                            </div>
                                             <div class="text-xs font-bold text-primary">1,240 pts</div>
                                         </div>
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-primary bg-indigo-50 border border-indigo-100">2</div>
-                                            <div class="flex-1"><div class="h-2 w-20 bg-slate-200 rounded mb-1"></div><div class="h-2 w-12 bg-slate-100 rounded"></div></div>
+                                            <div class="flex-1">
+                                                <div class="h-2 w-20 bg-slate-200 rounded mb-1"></div>
+                                                <div class="h-2 w-12 bg-slate-100 rounded"></div>
+                                            </div>
                                             <div class="text-xs font-bold text-slate-900">You</div>
                                         </div>
                                     </div>
@@ -324,37 +402,39 @@
             </div>
 
             <!-- Marquee Strip -->
-            <div class="relative z-20 bg-slate-900 py-5 overflow-hidden border-y border-slate-800">
-                <div class="flex items-center gap-16 whitespace-nowrap text-slate-300 font-bold text-sm tracking-widest uppercase select-none" id="marquee-track">
-                     <div class="flex items-center gap-16">
-                        <span class="flex items-center gap-3"><i data-lucide="radio" class="text-emerald-400"></i> Live Guard Tracking</span>
-                        <span class="flex items-center gap-3"><i data-lucide="map-pin" class="text-indigo-400"></i> 8 Campus Buildings</span>
-                        <span class="flex items-center gap-3"><i data-lucide="users" class="text-amber-400"></i> 500+ Active Students</span>
-                        <span class="flex items-center gap-3"><i data-lucide="zap" class="text-purple-400"></i> Real-time Alerts</span>
-                        <span class="flex items-center gap-3"><i data-lucide="coffee" class="text-orange-400"></i> Canteen Status</span>
+            <div class="relative z-20 bg-slate-900 py-4 md:py-5 overflow-hidden border-y border-slate-800">
+                <div class="flex items-center gap-8 md:gap-16 whitespace-nowrap text-slate-300 font-bold text-xs md:text-sm tracking-widest uppercase select-none" id="marquee-track">
+                     <div class="flex items-center gap-8 md:gap-16">
+                        <span class="flex items-center gap-2 md:gap-3">🔴 Live Tracking</span>
+                        <span class="flex items-center gap-2 md:gap-3">📍 8 Buildings</span>
+                        <span class="flex items-center gap-2 md:gap-3">👥 500+ Students</span>
+                        <span class="flex items-center gap-2 md:gap-3">⚡ Real-time</span>
                      </div>
-                     <div class="flex items-center gap-16">
-                        <span class="flex items-center gap-3"><i data-lucide="radio" class="text-emerald-400"></i> Live Guard Tracking</span>
-                        <span class="flex items-center gap-3"><i data-lucide="map-pin" class="text-indigo-400"></i> 8 Campus Buildings</span>
-                        <span class="flex items-center gap-3"><i data-lucide="users" class="text-amber-400"></i> 500+ Active Students</span>
-                        <span class="flex items-center gap-3"><i data-lucide="zap" class="text-purple-400"></i> Real-time Alerts</span>
-                        <span class="flex items-center gap-3"><i data-lucide="coffee" class="text-orange-400"></i> Canteen Status</span>
+                     <div class="flex items-center gap-8 md:gap-16">
+                        <span class="flex items-center gap-2 md:gap-3">🔴 Live Tracking</span>
+                        <span class="flex items-center gap-2 md:gap-3">📍 8 Buildings</span>
+                        <span class="flex items-center gap-2 md:gap-3">👥 500+ Students</span>
+                        <span class="flex items-center gap-2 md:gap-3">⚡ Real-time</span>
                      </div>
-                     <div class="flex items-center gap-16">
-                        <span class="flex items-center gap-3"><i data-lucide="radio" class="text-emerald-400"></i> Live Guard Tracking</span>
-                        <span class="flex items-center gap-3"><i data-lucide="map-pin" class="text-indigo-400"></i> 8 Campus Buildings</span>
-                        <span class="flex items-center gap-3"><i data-lucide="users" class="text-amber-400"></i> 500+ Active Students</span>
-                        <span class="flex items-center gap-3"><i data-lucide="zap" class="text-purple-400"></i> Real-time Alerts</span>
-                        <span class="flex items-center gap-3"><i data-lucide="coffee" class="text-orange-400"></i> Canteen Status</span>
+                     <div class="flex items-center gap-8 md:gap-16">
+                        <span class="flex items-center gap-2 md:gap-3">🔴 Live Tracking</span>
+                        <span class="flex items-center gap-2 md:gap-3">📍 8 Buildings</span>
+                        <span class="flex items-center gap-2 md:gap-3">👥 500+ Students</span>
+                        <span class="flex items-center gap-2 md:gap-3">⚡ Real-time</span>
+                     </div>
+                     <div class="flex items-center gap-8 md:gap-16">
+                        <span class="flex items-center gap-2 md:gap-3">🔴 Live Tracking</span>
+                        <span class="flex items-center gap-2 md:gap-3">📍 8 Buildings</span>
+                        <span class="flex items-center gap-2 md:gap-3">👥 500+ Students</span>
+                        <span class="flex items-center gap-2 md:gap-3">⚡ Real-time</span>
                      </div>
                 </div>
             </div>
 
-            
             <!-- SECTION 3: How It Works -->
-            <div class="py-24 relative overflow-hidden bg-white" id="section-steps">
+            <div class="py-16 md:py-24 relative overflow-hidden bg-white" id="section-steps">
                 <div class="container mx-auto px-6 relative z-10">
-                    <div class="text-center mb-16">
+                    <div class="text-center mb-12 md:mb-16">
                         <h2 class="text-3xl font-bold text-slate-900 mb-4">How it works</h2>
                         <p class="text-slate-500 max-w-xl mx-auto">Seamless navigation in 4 simple steps.</p>
                     </div>
@@ -364,34 +444,34 @@
                             <div id="step-line" class="h-full bg-primary origin-left scale-x-0 w-full"></div>
                         </div>
 
-                        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-8">
                             <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
-                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
-                                    <span class="text-2xl font-bold text-primary">1</span>
+                                <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-4 md:mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-xl md:text-2xl font-bold text-primary">1</span>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2 text-slate-900">Login</h3>
-                                <p class="text-sm text-slate-500">Use your university ID to access the secure map.</p>
+                                <h3 class="font-bold text-base md:text-lg mb-2 text-slate-900">Login</h3>
+                                <p class="text-xs md:text-sm text-slate-500">Use your university ID.</p>
                             </div>
                             <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
-                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
-                                    <span class="text-2xl font-bold text-primary">2</span>
+                                <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-4 md:mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-xl md:text-2xl font-bold text-primary">2</span>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2 text-slate-900">Locate</h3>
-                                <p class="text-sm text-slate-500">Select any building to view detailed floor plans.</p>
+                                <h3 class="font-bold text-base md:text-lg mb-2 text-slate-900">Locate</h3>
+                                <p class="text-xs md:text-sm text-slate-500">View detailed floor plans.</p>
                             </div>
                             <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
-                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
-                                    <span class="text-2xl font-bold text-primary">3</span>
+                                <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-4 md:mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-xl md:text-2xl font-bold text-primary">3</span>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2 text-slate-900">Report</h3>
-                                <p class="text-sm text-slate-500">Drop pins for guards, food, or empty seats.</p>
+                                <h3 class="font-bold text-base md:text-lg mb-2 text-slate-900">Report</h3>
+                                <p class="text-xs md:text-sm text-slate-500">Drop pins for guards or food.</p>
                             </div>
                             <div class="gsap-step relative z-10 flex flex-col items-center text-center group">
-                                <div class="w-24 h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-6 group-hover:border-primary transition-colors duration-300">
-                                    <span class="text-2xl font-bold text-primary">4</span>
+                                <div class="w-20 h-20 md:w-24 md:h-24 bg-white rounded-full border-4 border-slate-50 shadow-lg flex items-center justify-center mb-4 md:mb-6 group-hover:border-primary transition-colors duration-300">
+                                    <span class="text-xl md:text-2xl font-bold text-primary">4</span>
                                 </div>
-                                <h3 class="font-bold text-lg mb-2 text-slate-900">Earn</h3>
-                                <p class="text-sm text-slate-500">Get points and badges for your contributions.</p>
+                                <h3 class="font-bold text-base md:text-lg mb-2 text-slate-900">Earn</h3>
+                                <p class="text-xs md:text-sm text-slate-500">Get points and badges.</p>
                             </div>
                         </div>
                     </div>
@@ -399,27 +479,18 @@
             </div>
 
             <!-- SECTION 4: Live Pulse -->
-            <div class="py-24 bg-slate-50 overflow-hidden" id="section-pulse">
+            <div class="py-16 md:py-24 bg-slate-50 overflow-hidden" id="section-pulse">
                 <div class="container mx-auto px-6 flex flex-col md:flex-row items-center gap-12">
-                    <div class="md:w-1/3">
-                        <div class="gsap-pulse-text">
+                    <div class="w-full md:w-1/3">
+                        <div class="gsap-pulse-text text-center md:text-left">
                             <span class="text-emerald-500 font-bold tracking-wider text-xs uppercase mb-2 block">Live Activity</span>
-                            <h2 class="text-4xl font-extrabold text-slate-900 mb-6">The campus pulse, <br>in real-time.</h2>
-                            <p class="text-slate-500 mb-8 leading-relaxed">See what's happening across campus right now. From quiet study corners to cafeteria rush hours.</p>
-                            <div class="flex items-center gap-4">
-                                <div class="flex -space-x-3">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Aneka" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
-                                    <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Mark" class="w-10 h-10 rounded-full border-2 border-white bg-slate-100">
-                                </div>
-                                <span class="text-sm font-bold text-slate-700">Join 150+ students online</span>
-                            </div>
+                            <h2 class="text-3xl md:text-4xl font-extrabold text-slate-900 mb-6">The campus pulse, <br>in real-time.</h2>
+                            <p class="text-slate-500 mb-8 leading-relaxed text-sm md:text-base">See what's happening across campus right now.</p>
                         </div>
                     </div>
-                    
-                    <div class="md:w-2/3 perspective-1000">
+                    <div class="w-full md:w-2/3 perspective-1000">
                         <div id="feed-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-hidden relative p-4" style="transform-style: preserve-3d; transform: rotateX(10deg) rotateY(-10deg);">
-                            <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center">
+                             <div class="gsap-feed-item bg-white p-4 rounded-xl shadow-lg border border-slate-100 flex gap-3 items-center">
                                 <div class="bg-red-100 p-2 rounded-lg text-red-600"><i data-lucide="shield-alert" class="w-5 h-5"></i></div>
                                 <div><p class="text-sm font-bold text-slate-900">Guard at Gate 2</p><p class="text-xs text-slate-500">Reported 2m ago</p></div>
                             </div>
@@ -441,60 +512,35 @@
             </div>
 
             <!-- SECTION 5: Testimonials -->
-            <div class="py-24 bg-white border-t border-slate-200">
+            <div class="py-16 md:py-24 bg-white border-t border-slate-200">
                 <div class="container mx-auto px-6">
-                    <div class="text-center mb-16">
+                    <div class="text-center mb-12 md:mb-16">
                         <h2 class="text-3xl font-bold text-slate-900">Student Voices</h2>
                     </div>
-                    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                        <div class="gsap-review-left bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex gap-1 text-amber-400 mb-4">
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            </div>
-                            <p class="text-slate-600 italic mb-6">"Finally, I don't have to walk all the way to the canteen just to see it's full. This app saves me so much time between classes."</p>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-primary">R</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Rahul S.</h4>
-                                    <span class="text-xs text-slate-400">Computer Science, Year 3</span>
-                                </div>
-                            </div>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div class="gsap-review-left bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                            <div class="flex gap-1 text-amber-400 mb-4"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                            <p class="text-slate-600 italic mb-6 text-sm md:text-base">"Finally, I don't have to walk all the way to the canteen just to see it's full. This app saves me so much time."</p>
+                            <div class="flex items-center gap-3"><div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-primary">R</div><div><h4 class="font-bold text-slate-900 text-sm">Rahul S.</h4><span class="text-xs text-slate-400">Computer Science</span></div></div>
                         </div>
-                        <div class="gsap-review-right bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex gap-1 text-amber-400 mb-4">
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            </div>
-                            <p class="text-slate-600 italic mb-6">"The guard tracking is a lifesaver when I'm running late. The interface is super clean and feels very professional."</p>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center font-bold text-pink-600">P</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Priya M.</h4>
-                                    <span class="text-xs text-slate-400">Architecture, Year 2</span>
-                                </div>
-                            </div>
+                        <div class="gsap-review-right bg-white p-6 md:p-8 rounded-2xl shadow-sm border border-slate-100">
+                            <div class="flex gap-1 text-amber-400 mb-4"><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i><i data-lucide="star" class="w-4 h-4 fill-current"></i></div>
+                            <p class="text-slate-600 italic mb-6 text-sm md:text-base">"The guard tracking is a lifesaver when I'm running late. The interface is super clean."</p>
+                            <div class="flex items-center gap-3"><div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center font-bold text-pink-600">P</div><div><h4 class="font-bold text-slate-900 text-sm">Priya M.</h4><span class="text-xs text-slate-400">Architecture</span></div></div>
                         </div>
                     </div>
                 </div>
             </div>
 
             <!-- SECTION 6: CTA -->
-            <div class="py-32 bg-slate-900 relative overflow-hidden flex items-center justify-center text-center">
+            <div class="py-24 md:py-32 bg-slate-900 relative overflow-hidden flex items-center justify-center text-center">
                 <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
                 <div class="gsap-cta-circle absolute w-[800px] h-[800px] bg-primary/20 rounded-full blur-[100px] pointer-events-none"></div>
                 
                 <div class="container mx-auto px-6 relative z-10">
                     <div class="gsap-cta-content max-w-2xl mx-auto">
-                        <h2 class="text-4xl md:text-6xl font-extrabold text-white mb-8 tracking-tight">Ready to navigate smarter?</h2>
-                        <p class="text-slate-400 text-lg mb-10">Join the thousands of students using Navigator today.</p>
-                        <button onclick="document.getElementById('username-input').focus(); document.querySelector('form').scrollIntoView({behavior: 'smooth'})" 
+                        <h2 class="text-3xl md:text-6xl font-extrabold text-white mb-6 md:mb-8 tracking-tight">Ready to navigate smarter?</h2>
+                        <button onclick="app.toggleLoginModal(true)" 
                             class="bg-white text-slate-900 px-8 py-4 rounded-full font-bold text-lg hover:bg-indigo-50 hover:scale-105 transition-all shadow-[0_0_30px_rgba(255,255,255,0.3)]">
                             Get Started Now
                         </button>
@@ -505,15 +551,14 @@
             <!-- FOOTER -->
             <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 relative z-10">
                 <div class="container mx-auto px-6">
-                    <div class="grid md:grid-cols-4 gap-12 mb-12">
-                        <div class="col-span-1 md:col-span-2">
+                    <div class="grid md:grid-cols-4 gap-12 mb-12 text-center md:text-left">
+                        <div class="col-span-1 md:col-span-2 flex flex-col items-center md:items-start">
                             <div class="flex items-center gap-3 mb-6">
-                                <!-- Footer Logo -->
                                 <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-8 h-8 object-contain mix-blend-multiply bg-white rounded-lg p-1">
                                 <span class="font-bold text-xl text-white tracking-tight">Spotty</span>
                             </div>
                             <p class="text-sm leading-relaxed max-w-xs mb-6">
-                                Empowering students with real-time campus intelligence. Built for the Presidency University community.
+                                Empowering students with real-time campus intelligence.
                             </p>
                         </div>
                         
@@ -535,15 +580,45 @@
                         </div>
                     </div>
                     
-                    <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs">
+                    <div class="border-t border-slate-900 pt-8 flex flex-col md:flex-row justify-between items-center text-xs text-center md:text-left">
                         <p>&copy; 2026 Spotty. All rights reserved.</p>
-                        <div class="flex gap-6 mt-4 md:mt-0">
-                            <a href="#" class="hover:text-white">Privacy</a>
-                            <a href="#" class="hover:text-white">Terms</a>
-                        </div>
                     </div>
                 </div>
             </footer>
+            
+            <!-- NEW LOGIN MODAL (Hidden by default) -->
+            <div id="login-modal-overlay" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4">
+                <div class="bg-white w-full max-w-md rounded-[2rem] shadow-2xl p-8 relative overflow-hidden transform scale-95 opacity-0">
+                    <button onclick="app.toggleLoginModal(false)" class="absolute top-6 right-6 text-slate-400 hover:text-slate-600 transition-colors z-10">
+                        <i data-lucide="x" class="w-6 h-6"></i>
+                    </button>
+                    
+                    <div class="text-center mb-8 relative z-10">
+                        <div class="w-20 h-20 bg-indigo-50 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-sm">
+                            <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-12 h-12 object-contain mix-blend-multiply">
+                        </div>
+                        <h2 class="text-2xl font-bold text-slate-900 mb-1">Welcome Back</h2>
+                        <p class="text-slate-500 text-sm">Enter your nickname to continue exploring</p>
+                    </div>
+
+                    <form id="modal-login-form" class="space-y-4 relative z-10" onsubmit="app.handleModalLogin(event)">
+                        <div class="space-y-1">
+                            <label class="text-xs font-bold text-slate-400 uppercase tracking-wide ml-1">Nickname</label>
+                            <div class="relative group">
+                                <i data-lucide="user" class="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-primary"></i>
+                                <input type="text" id="modal-username-input" placeholder="e.g. CampusExplorer" required
+                                    class="w-full pl-12 pr-4 py-3.5 bg-slate-50 rounded-xl border border-slate-200 focus:bg-white focus:border-primary/50 focus:ring-4 focus:ring-primary/10 outline-none transition-all font-medium text-slate-900 placeholder:text-slate-400">
+                            </div>
+                        </div>
+                        <button type="submit" class="w-full bg-slate-900 text-white font-bold text-base py-3.5 rounded-xl shadow-lg shadow-slate-900/20 hover:shadow-slate-900/30 hover:scale-[1.01] transition-all flex justify-center items-center gap-2">
+                            Enter Spotty <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                        </button>
+                    </form>
+                    
+                    <!-- Decorative BG -->
+                    <div class="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-indigo-50/50 to-transparent pointer-events-none"></div>
+                </div>
+            </div>
         </div>
 
         <!-- ====================
@@ -551,15 +626,13 @@
              ==================== -->
         <div id="dashboard-view" class="hidden flex-1 flex flex-col pb-24 md:pb-0">
             <!-- Header -->
-            <header class="glass-panel sticky top-0 z-30 px-6 py-4 flex justify-between items-center border-b border-white/20">
-                <div class="flex items-center gap-3">
-                    <!-- Back/Logout Button -->
+            <header class="glass-panel sticky top-0 z-30 px-4 md:px-6 py-3 md:py-4 flex justify-between items-center border-b border-white/20">
+                <div class="flex items-center gap-2 md:gap-3">
                     <button onclick="app.logout()" class="p-2 -ml-2 rounded-full hover:bg-slate-100 text-slate-500 hover:text-slate-900 transition-colors" title="Log Out & Return Home">
                         <i data-lucide="arrow-left" class="w-5 h-5"></i>
                     </button>
 
-                    <!-- Dashboard Logo -->
-                    <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-8 h-8 object-contain mix-blend-multiply">
+                    <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-7 h-7 md:w-8 md:h-8 object-contain mix-blend-multiply">
                     
                     <div>
                         <h2 class="font-bold text-slate-900 text-sm leading-tight">Spotty</h2>
@@ -569,23 +642,22 @@
                     </div>
                 </div>
                 
-                <div class="flex items-center gap-4">
-                    <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-3 py-1.5 rounded-full shadow-sm">
-                        <span class="text-amber-500">🪙</span> 
-                        <span id="user-points-display" class="font-bold text-slate-700 text-sm">0</span>
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="flex items-center gap-1.5 bg-white border border-slate-200 px-2 py-1 md:px-3 md:py-1.5 rounded-full shadow-sm">
+                        <span class="text-amber-500 text-xs md:text-sm">🪙</span> 
+                        <span id="user-points-display" class="font-bold text-slate-700 text-xs md:text-sm">0</span>
                     </div>
-                    <!-- User Avatar (Clickable) -->
-                    <div id="user-avatar" onclick="router.navigate('profile')" class="w-9 h-9 bg-slate-900 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md cursor-pointer ring-2 ring-white hover:ring-primary transition-all">U</div>
+                    <div id="user-avatar" onclick="router.navigate('profile')" class="w-8 h-8 md:w-9 md:h-9 bg-slate-900 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold shadow-md cursor-pointer ring-2 ring-white hover:ring-primary transition-all">U</div>
                 </div>
             </header>
 
             <!-- Main Content Area -->
-            <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden p-4 md:p-8 relative">
+            <main id="main-content" class="flex-1 overflow-y-auto overflow-x-hidden p-3 md:p-8 relative">
                 <!-- Dynamic Content Injected Here -->
             </main>
 
             <!-- Bottom Navigation -->
-            <nav class="fixed bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-8 z-40 border border-white/10">
+            <nav class="fixed bottom-4 md:bottom-6 left-1/2 -translate-x-1/2 bg-slate-900/90 backdrop-blur-md text-white px-6 py-3 rounded-full shadow-2xl flex items-center gap-8 md:gap-12 z-40 border border-white/10 w-[90%] md:w-auto justify-around">
                 <button onclick="router.navigate('map')" class="nav-btn active flex flex-col items-center gap-1 text-primary-300 transition-all hover:text-white">
                     <i data-lucide="map" class="w-5 h-5"></i>
                 </button>
@@ -601,38 +673,37 @@
         <!-- ====================
              COMPONENTS
              ==================== -->
-        <div id="toast-container" class="fixed top-20 right-6 z-50 pointer-events-none flex flex-col gap-2"></div>
+        <div id="toast-container" class="fixed top-20 right-6 z-50 pointer-events-none flex flex-col gap-2 w-[90%] max-w-sm md:w-auto"></div>
         <div id="modal-overlay" class="hidden fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-50 flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
             <div id="modal-content" class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden transform scale-95 transition-transform duration-300"></div>
         </div>
 
     </div>
 
-    <script>
+    <!-- MAIN SCRIPT (Module Type) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signOut, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
         gsap.registerPlugin(ScrollTrigger);
 
-        // DATA CONFIG - UPDATED BUILDINGS TO MATCH MAP IMAGE
+        const firebaseConfig = JSON.parse(__firebase_config);
+        const firebaseApp = initializeApp(firebaseConfig);
+        const auth = getAuth(firebaseApp);
+        const db = getFirestore(firebaseApp);
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+
         const BUILDINGS = [
-            // Row 1
             { id: 1, name: 'School of Management', icon: 'briefcase', color: 'bg-indigo-100 text-indigo-600', floors: 4, gridArea: '1 / 1 / 2 / 2' },
             { id: 2, name: 'School of Law', icon: 'scale', color: 'bg-purple-100 text-purple-600', floors: 5, gridArea: '1 / 2 / 2 / 3' },
             { id: 3, name: 'School of Engineering', icon: 'cpu', color: 'bg-blue-100 text-blue-600', floors: 6, gridArea: '1 / 3 / 2 / 4' },
-            // Row 2
             { id: 4, name: 'Auditorium', icon: 'mic-2', color: 'bg-rose-100 text-rose-600', floors: 2, gridArea: '2 / 1 / 3 / 2' },
-            { id: 9, name: 'Central Fountain', icon: 'droplets', color: 'bg-blue-100 text-blue-600', floors: 1, gridArea: '2 / 2 / 3 / 3' }, // Center
+            { id: 9, name: 'Central Fountain', icon: 'droplets', color: 'bg-blue-100 text-blue-600', floors: 1, gridArea: '2 / 2 / 3 / 3' },
             { id: 5, name: 'Admission Office', icon: 'building', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4' },
-            // Row 3
-            { id: 6, name: 'Cafeteria & Hostel', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2' },
-            { id: 7, name: 'Hostel Mess', icon: 'utensils', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3' },
+            { id: 6, name: 'Cafeteria', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2' },
+            { id: 7, name: 'Hostel', icon: 'home', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3' },
             { id: 8, name: 'Sports Field', icon: 'dumbbell', color: 'bg-teal-100 text-teal-600', floors: 1, gridArea: '3 / 3 / 4 / 4' },
-        ];
-
-        // SEED DATA
-        const SEED_PINS = [
-            { id: 'g1', type: 'guard', bId: 1, floor: 1, x: 20, y: 80, author: 'Admin', timestamp: Date.now() },
-            { id: 'g2', type: 'guard', bId: 2, floor: 1, x: 50, y: 90, author: 'Admin', timestamp: Date.now() },
-            { id: 'g3', type: 'guard', bId: 7, floor: 1, x: 50, y: 20, author: 'Admin', timestamp: Date.now() },
-            { id: 'g5', type: 'info', bId: 5, floor: 1, x: 50, y: 50, author: 'Admin', timestamp: Date.now() }, 
         ];
 
         const PIN_TYPES = [
@@ -645,15 +716,10 @@
         ];
 
         const state = {
-            user: JSON.parse(localStorage.getItem('campusNavUser')) || null,
-            pins: JSON.parse(localStorage.getItem('campusNavPins')) || SEED_PINS,
-            points: parseInt(localStorage.getItem('campusNavPoints')) || 0,
-        };
-
-        const saveState = () => {
-            if (state.user) localStorage.setItem('campusNavUser', JSON.stringify(state.user));
-            localStorage.setItem('campusNavPins', JSON.stringify(state.pins));
-            localStorage.setItem('campusNavPoints', state.points.toString());
+            user: null,
+            pins: [],
+            points: 0,
+            userId: null
         };
 
         const UI = {
@@ -661,7 +727,7 @@
                 const container = document.getElementById('toast-container');
                 const el = document.createElement('div');
                 const borderClass = type === 'error' ? 'border-l-red-500' : 'border-l-emerald-500';
-                el.className = `glass-panel pl-4 pr-6 py-3 rounded-lg shadow-lg border-l-4 ${borderClass} flex items-center gap-3 transform translate-x-full opacity-0 transition-all duration-500`;
+                el.className = `glass-panel pl-4 pr-6 py-3 rounded-lg shadow-lg border-l-4 ${borderClass} flex items-center gap-3 transform translate-x-full opacity-0 transition-all duration-500 w-full`;
                 el.innerHTML = `<span class="font-medium text-sm text-slate-800">${message}</span>`;
                 container.appendChild(el);
                 requestAnimationFrame(() => el.classList.remove('translate-x-full', 'opacity-0'));
@@ -670,7 +736,6 @@
                     setTimeout(() => el.remove(), 500);
                 }, 3000);
             },
-
             modal: (content) => {
                 const overlay = document.getElementById('modal-overlay');
                 const container = document.getElementById('modal-content');
@@ -693,309 +758,127 @@
             }
         };
 
-        // RENDER LOGIC
-        const renderMap = () => {
-            const container = document.getElementById('main-content');
-            let buildingsHTML = BUILDINGS.map(b => `
-                <div class="building-card gsap-map-item group" style="grid-area: ${b.gridArea}" onclick="app.selectBuilding(${b.id})">
-                    <div class="w-12 h-12 ${b.color} rounded-2xl flex items-center justify-center mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm">
-                        <i data-lucide="${b.icon}" class="w-6 h-6"></i>
-                    </div>
-                    <span class="text-xs font-bold text-slate-700 text-center leading-tight group-hover:text-primary transition-colors">${b.name}</span>
-                    <div class="absolute top-3 right-3 w-2 h-2 rounded-full bg-emerald-500 animate-pulse border border-white"></div>
-                </div>
-            `).join('');
-
-            // Added Fountain Centerpiece
-            buildingsHTML += `
-                <div class="waterfall-zone flex items-center justify-center flex-col text-white z-0" style="grid-area: 2 / 2 / 3 / 3">
-                    <div class="water-flow"></div>
-                    <div class="relative z-10 font-bold text-center text-[10px] uppercase tracking-widest opacity-90 drop-shadow-md">Central<br>Fountain</div>
-                </div>
-            `;
-
-            container.innerHTML = `
-                <div class="w-full h-full flex flex-col">
-                    <div class="flex justify-between items-end mb-6 px-2">
-                        <div>
-                            <h1 class="text-2xl font-bold text-slate-900 tracking-tight">Campus Overview</h1>
-                            <p class="text-slate-500 text-sm font-medium">Select a zone to view floor plans</p>
-                        </div>
-                    </div>
-                    <div class="flex-1 flex items-center justify-center py-4 overflow-auto">
-                        <div class="campus-grid relative">
-                            ${buildingsHTML}
-                            <div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent rounded-full blur-3xl -z-10 scale-125 pointer-events-none"></div>
-                        </div>
-                    </div>
-                </div>
-            `;
-            lucide.createIcons();
-            gsap.from(".gsap-map-item", { duration: 0.6, scale: 0.8, opacity: 0, stagger: 0.05, ease: "back.out(1.5)" });
-            gsap.from(".waterfall-zone", { duration: 1, scale: 0, delay: 0.2, ease: "elastic.out(1, 0.7)" });
-        };
-
-        const renderBuildingDetail = (buildingId) => {
-            const building = BUILDINGS.find(b => b.id === buildingId);
-            // Handle undefined building just in case (e.g. Fountain)
-            if (!building) {
-                 return UI.toast("This zone is not accessible.", "error");
-            }
-            
-            const container = document.getElementById('main-content');
-            
-            let floorsHTML = '';
-            for(let i=1; i<=building.floors; i++) {
-                floorsHTML += `<button onclick="app.selectFloor(${i})" class="flex-shrink-0 px-5 py-2 rounded-full font-semibold text-xs transition-all ${i === 1 ? 'bg-slate-900 text-white shadow-lg' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'}">Level ${i}</button>`;
-            }
-
-            container.innerHTML = `
-                <div class="h-full flex flex-col">
-                    <div class="flex items-center gap-4 mb-6">
-                        <button onclick="router.navigate('map')" class="bg-white p-2 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors shadow-sm"><i data-lucide="arrow-left" class="w-5 h-5 text-slate-700"></i></button>
-                        <div><h2 class="text-xl font-bold text-slate-900 flex items-center gap-2">${building.name}</h2></div>
-                    </div>
-                    <div class="flex gap-2 overflow-x-auto no-scrollbar pb-4 mb-2">${floorsHTML}</div>
-                    <div id="floor-map-container" class="flex-1 bg-white rounded-2xl border border-slate-200 relative overflow-hidden cursor-crosshair shadow-sm group">
-                        <div class="absolute inset-0 bg-slate-100 bg-cover bg-center opacity-90 grayscale-[0.2]" style="background-image: url('https://images.unsplash.com/photo-1541829070764-84a7d30dd3f3?q=80&w=1200&auto=format&fit=crop');"></div>
-                        <div class="absolute inset-0 bg-grid-pattern bg-[length:40px_40px] opacity-20 pointer-events-none"></div>
-                        <div class="absolute inset-0 bg-white/40 backdrop-blur-[1px] pointer-events-none"></div>
-                        <div class="absolute bottom-4 right-4 bg-white/90 backdrop-blur px-3 py-1.5 rounded-lg border border-slate-100 text-xs font-bold text-slate-500 pointer-events-none shadow-sm z-20">Level 1 Schematic</div>
-                        <div id="pins-layer" class="absolute inset-0 w-full h-full z-10"></div>
-                        <div class="absolute top-4 left-1/2 -translate-x-1/2 bg-slate-900/80 backdrop-blur text-white text-xs font-medium px-4 py-2 rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none z-20 shadow-lg border border-slate-100">Tap anywhere to report activity</div>
-                    </div>
-                </div>
-
-            `;
-            lucide.createIcons();
-            const mapContainer = document.getElementById('floor-map-container');
-            mapContainer.addEventListener('click', (e) => {
-                if(e.target.closest('.map-pin')) return;
-                const rect = mapContainer.getBoundingClientRect();
-                const x = ((e.clientX - rect.left) / rect.width) * 100;
-                const y = ((e.clientY - rect.top) / rect.height) * 100;
-                app.showAddPinModal(buildingId, 1, x, y);
-            });
-            app.renderPins(buildingId, 1);
-        };
-
-        const renderLeaderboard = () => {
-            const container = document.getElementById('main-content');
-            const dummyUsers = [
-                { name: 'Sarah Jenkins', points: 1250, initial: 'S' },
-                { name: 'Rahul Kumar', points: 980, initial: 'R' },
-                { name: 'Mike Tyson', points: 850, initial: 'M' },
-                { name: state.user.name, points: state.points, initial: state.user.name[0], isMe: true }
-            ].sort((a,b) => b.points - a.points);
-
-            const listHTML = dummyUsers.map((u, index) => {
-                const isMe = u.isMe ? 'bg-indigo-50 border-indigo-200' : 'bg-white border-slate-100';
-                return `<div class="gsap-rank-item flex items-center gap-4 p-4 rounded-xl mb-3 border ${isMe} transition-all hover:shadow-md">
-                    <div class="font-bold text-lg w-6 text-center text-slate-400">#${index+1}</div>
-                    <div class="w-10 h-10 rounded-full bg-slate-200 flex items-center justify-center font-bold text-slate-600 text-sm">${u.initial}</div>
-                    <div class="flex-1"><div class="font-bold text-slate-900 text-sm flex items-center gap-2">${u.name} ${u.isMe ? '<span class="text-[10px] bg-indigo-100 text-indigo-700 px-1.5 rounded uppercase font-bold tracking-wider">You</span>' : ''}</div></div>
-                    <div class="font-bold text-slate-900 bg-amber-50 text-amber-600 px-3 py-1 rounded-lg text-sm border border-amber-100">${u.points} pts</div>
-                </div>`;
-            }).join('');
-
-            container.innerHTML = `<div class="max-w-md mx-auto"><div class="text-center mb-8"><h1 class="text-2xl font-bold text-slate-900">Leaderboard</h1><p class="text-slate-500 text-sm">Top contributors this week</p></div><div class="pb-20">${listHTML}</div></div>`;
-            gsap.from(".gsap-rank-item", { y: 10, opacity: 0, duration: 0.6, stagger: 0.1, ease: "power2.out" });
-        };
-
-        const renderProfile = () => {
-            const container = document.getElementById('main-content');
-            const user = state.user || {};
-            const default_avatar = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
-            
-            // Generate HTML for profile view
-            container.innerHTML = `
-                <div class="w-full h-full flex flex-col overflow-y-auto pb-24">
-                    <!-- Profile Card -->
-                    <div class="max-w-2xl mx-auto w-full bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden relative group">
-                        
-                        <!-- Header Background -->
-                        <div class="h-32 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden">
-                            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-                        </div>
-                        
-                        <div class="px-8 pb-8">
-                            <!-- Avatar Section -->
-                            <div class="relative -mt-12 mb-6 flex justify-between items-end">
-                                <div class="relative group/avatar">
-                                    <div class="w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 relative">
-                                        <img id="profile-img-preview" src="${user.avatar || default_avatar}" class="w-full h-full object-cover" alt="Profile">
-                                        <!-- Overlay for Edit Mode (Initially Hidden) -->
-                                        <label for="avatar-upload" id="avatar-overlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-opacity cursor-pointer ${user.isEditing ? 'opacity-100' : ''}" style="display: ${user.isEditing ? 'flex' : 'none'}">
-                                            <i data-lucide="camera" class="w-8 h-8 text-white"></i>
-                                        </label>
-                                    </div>
-                                    <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="app.handleAvatarUpload(this)">
-                                </div>
-                                
-                                <button onclick="app.toggleEditMode()" id="edit-btn" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-sm hover:bg-slate-200 transition-colors flex items-center gap-2">
-                                    <i data-lucide="${user.isEditing ? 'x' : 'edit-2'}" class="w-4 h-4"></i>
-                                    ${user.isEditing ? 'Cancel' : 'Edit Profile'}
-                                </button>
-                            </div>
-
-                            <!-- User Identity -->
-                            <div class="mb-8">
-                                <h1 class="text-3xl font-bold text-slate-900 mb-1">${user.name || 'Student'}</h1>
-                                <p class="text-slate-500 font-medium flex items-center gap-2">
-                                    <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-500"></i>
-                                    ${user.branch || 'Presidency University'}
-                                </p>
-                            </div>
-
-                            <!-- Form Fields -->
-                            <form id="profile-form" onsubmit="app.saveProfile(event)" class="space-y-6">
-                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                                    <!-- Nickname -->
-                                    <div class="space-y-2">
-                                        <label class="profile-label">Nickname</label>
-                                        <input type="text" name="name" value="${user.name || ''}" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
-                                    </div>
-                                    
-                                    <!-- Branch -->
-                                    <div class="space-y-2">
-                                        <label class="profile-label">Branch / Major</label>
-                                        <input type="text" name="branch" value="${user.branch || ''}" placeholder="e.g. Computer Science" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
-                                    </div>
-
-                                    <!-- Age -->
-                                    <div class="space-y-2">
-                                        <label class="profile-label">Age</label>
-                                        <input type="number" name="age" value="${user.age || ''}" placeholder="18+" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
-                                    </div>
-
-                                    <!-- Contact -->
-                                    <div class="space-y-2">
-                                        <label class="profile-label">Contact (Email/Phone)</label>
-                                        <input type="text" name="contact" value="${user.contact || ''}" placeholder="student@presidency.edu" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
-                                    </div>
-                                </div>
-
-                                <!-- Bio / What I Love -->
-                                <div class="space-y-2">
-                                    <label class="profile-label">What I Love <i data-lucide="heart" class="w-3 h-3 text-pink-500 inline fill-current"></i></label>
-                                    <textarea name="bio" rows="3" placeholder="Coding, Coffee, and Campus Walks..." class="profile-input resize-none" ${user.isEditing ? '' : 'disabled'}>${user.bio || ''}</textarea>
-                                </div>
-
-                                <!-- Save Button (Only visible in Edit Mode) -->
-                                <div id="save-actions" class="${user.isEditing ? 'block' : 'hidden'} pt-4">
-                                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.01] transition-all flex justify-center items-center gap-2">
-                                        <i data-lucide="save" class="w-4 h-4"></i> Save Changes
-                                    </button>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-
-                    <!-- Logout Zone -->
-                    <div class="mt-8 text-center">
-                        <button onclick="app.logout()" class="text-slate-400 hover:text-red-500 text-sm font-semibold transition-colors flex items-center justify-center gap-2 mx-auto">
-                            <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
-                        </button>
-                    </div>
-                </div>
-            `;
-            
-            lucide.createIcons();
-            
-            // Animation for entrance
-            gsap.from(".max-w-2xl", {
-                y: 20, opacity: 0, duration: 0.5, ease: "power2.out"
-            });
-        };
-
         const app = {
-            init: () => {
-                setTimeout(() => {
-                    document.getElementById('splash-view').classList.add('hidden');
-                    if (state.user) {
-                        router.navigate('map');
-                        app.updateUserHeader();
+            init: async () => {
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
                     } else {
-                        document.getElementById('auth-view').classList.remove('hidden');
-                        app.initLandingAnimations();
+                        await signInAnonymously(auth);
                     }
-                }, 800);
+                };
+                await initAuth();
 
-                document.getElementById('login-form').addEventListener('submit', (e) => {
-                    e.preventDefault();
-                    const username = document.getElementById('username-input').value;
-                    if(username.length < 3) return UI.toast('Please enter a valid ID', 'error');
-                    state.user = { name: username, id: Date.now().toString(), isEditing: false };
-                    saveState();
-                    const authView = document.getElementById('auth-view');
-                    gsap.to(authView, {
-                        y: -20, opacity: 0, duration: 0.6, ease: "power3.in",
-                        onComplete: () => {
-                            authView.classList.add('hidden');
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        state.userId = user.uid;
+                        const profileRef = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'data');
+                        const profileSnap = await getDoc(profileRef);
+                        
+                        if (profileSnap.exists()) {
+                            state.user = profileSnap.data();
+                            if (state.user.points) {
+                                state.points = state.user.points;
+                            }
+                            document.getElementById('splash-view').classList.add('hidden');
+                            document.getElementById('auth-view').classList.add('hidden');
                             router.navigate('map');
                             app.updateUserHeader();
+                        } else {
+                             document.getElementById('splash-view').classList.add('hidden');
+                             document.getElementById('auth-view').classList.remove('hidden');
+                             app.initLandingAnimations();
                         }
-                    });
+                    } else {
+                        setTimeout(() => {
+                             document.getElementById('splash-view').classList.add('hidden');
+                             document.getElementById('auth-view').classList.remove('hidden');
+                             app.initLandingAnimations();
+                        }, 800);
+                    }
+                });
+
+                const loginForm = document.getElementById('login-form');
+                if(loginForm) {
+                    loginForm.addEventListener('submit', (e) => app.processLogin(e, 'username-input'));
+                }
+            },
+
+            processLogin: async (e, inputId) => {
+                e.preventDefault();
+                const username = document.getElementById(inputId).value;
+                if(username.length < 3) return UI.toast('Please enter a valid nickname', 'error');
+                
+                if (!auth.currentUser) {
+                        await signInAnonymously(auth);
+                }
+                
+                const uid = auth.currentUser.uid;
+                const profileRef = doc(db, 'artifacts', appId, 'users', uid, 'profile', 'data');
+                const userData = { 
+                    name: username, 
+                    id: uid, 
+                    joined: Date.now(),
+                    isEditing: false
+                };
+                
+                await setDoc(profileRef, userData, { merge: true });
+                state.user = userData;
+                state.userId = uid;
+
+                app.toggleLoginModal(false);
+
+                const authView = document.getElementById('auth-view');
+                gsap.to(authView, {
+                    y: -20, opacity: 0, duration: 0.6, ease: "power3.in",
+                    onComplete: () => {
+                        authView.classList.add('hidden');
+                        router.navigate('map');
+                        app.updateUserHeader();
+                    }
                 });
             },
 
-            // PROFILE: Handle Profile Click on Landing Page
             handleLandingProfileClick: (e) => {
                 if (e) e.preventDefault();
-                // Scroll to login form as user must log in to see profile
-                const form = document.querySelector('form');
-                if(form) {
-                    form.scrollIntoView({behavior: 'smooth'});
-                    document.getElementById('username-input').focus();
-                    UI.toast('Please enter your name to access Profile', 'info');
+                app.toggleLoginModal(true);
+            },
+            
+            toggleMobileMenu: () => {
+                const menu = document.getElementById('mobile-menu');
+                if (menu.classList.contains('hidden')) {
+                    menu.classList.remove('hidden');
+                    gsap.to(menu, { scaleY: 1, opacity: 1, duration: 0.3, ease: "power2.out" });
+                } else {
+                    gsap.to(menu, { scaleY: 0, opacity: 0, duration: 0.2, ease: "power2.in", onComplete: () => menu.classList.add('hidden') });
                 }
             },
-
-            // PROFILE: Toggle Edit Mode
-            toggleEditMode: () => {
-                state.user.isEditing = !state.user.isEditing;
-                saveState();
-                renderProfile(); // Re-render to update UI state
-            },
-
-            // PROFILE: Handle Avatar Upload
-            handleAvatarUpload: (input) => {
-                if (input.files && input.files[0]) {
-                    const reader = new FileReader();
-                    reader.onload = (e) => {
-                        state.user.avatar = e.target.result;
-                        saveState();
-                        // Update image immediately without full re-render
-                        document.getElementById('profile-img-preview').src = e.target.result;
-                        UI.toast("Profile picture updated!");
-                    };
-                    reader.readAsDataURL(input.files[0]);
+            
+            toggleLoginModal: (show) => {
+                const modal = document.getElementById('login-modal-overlay');
+                if (show) {
+                    modal.classList.remove('hidden');
+                    const content = modal.children[0];
+                    gsap.fromTo(content, {scale: 0.9, opacity: 0}, {scale: 1, opacity: 1, duration: 0.4, ease: "back.out(1.2)"});
+                    setTimeout(() => document.getElementById('modal-username-input').focus(), 100);
+                } else {
+                    const content = modal.children[0];
+                    gsap.to(content, {scale: 0.9, opacity: 0, duration: 0.3, onComplete: () => modal.classList.add('hidden')});
                 }
             },
-
-            // PROFILE: Save Changes
-            saveProfile: (e) => {
-                e.preventDefault();
-                const formData = new FormData(e.target);
-                
-                state.user.name = formData.get('name');
-                state.user.age = formData.get('age');
-                state.user.branch = formData.get('branch');
-                state.user.contact = formData.get('contact');
-                state.user.bio = formData.get('bio');
-                state.user.isEditing = false; // Exit edit mode
-                
-                saveState();
-                renderProfile();
-                app.updateUserHeader();
-                UI.toast("Profile updated successfully!");
+            
+            handleModalLogin: (e) => {
+                app.processLogin(e, 'modal-username-input');
             },
 
-            logout: () => {
+            logout: async () => {
+                await signOut(auth);
                 state.user = null;
-                localStorage.removeItem('campusNavUser');
+                state.userId = null;
+                
                 const dashboard = document.getElementById('dashboard-view');
                 const authView = document.getElementById('auth-view');
+                
                 gsap.to(dashboard, {
                     opacity: 0, y: 20, duration: 0.4, ease: "power2.in",
                     onComplete: () => {
@@ -1010,53 +893,67 @@
                 });
             },
 
+            // PROFILE METHODS
+            toggleEditMode: () => {
+                if(!state.user) return;
+                state.user.isEditing = !state.user.isEditing;
+                renderProfile(); 
+            },
+            handleAvatarUpload: (input) => {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        state.user.avatar = e.target.result;
+                        if(state.userId) {
+                             const profileRef = doc(db, 'artifacts', appId, 'users', state.userId, 'profile', 'data');
+                             await setDoc(profileRef, { avatar: e.target.result }, { merge: true });
+                        }
+                        document.getElementById('profile-img-preview').src = e.target.result;
+                        UI.toast("Profile picture updated!");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
+            saveProfile: async (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                const updates = {
+                    name: formData.get('name'),
+                    age: formData.get('age'),
+                    branch: formData.get('branch'),
+                    contact: formData.get('contact'),
+                    bio: formData.get('bio'),
+                    isEditing: false
+                };
+                state.user = { ...state.user, ...updates };
+                if (state.userId) {
+                    const profileRef = doc(db, 'artifacts', appId, 'users', state.userId, 'profile', 'data');
+                    await setDoc(profileRef, updates, { merge: true });
+                }
+                renderProfile();
+                app.updateUserHeader();
+                UI.toast("Profile updated successfully!");
+            },
+
             initLandingAnimations: () => {
                 const tl = gsap.timeline();
                 tl.to(".gsap-reveal", { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" })
                   .from(".gsap-card", { y: 40, opacity: 0, duration: 1.2, stagger: 0.2, ease: "power3.out" }, "-=0.8");
-
-                gsap.to("#marquee-track", {
-                    xPercent: -33.33, ease: "none", duration: 25, repeat: -1
-                });
-
-                const featureTl = gsap.timeline({
-                    scrollTrigger: { trigger: "#features-section", start: "top 95%" }
-                });
-                featureTl.from(".gsap-feature-header", { y: 20, opacity: 0, duration: 0.5, stagger: 0.1, ease: "power2.out" })
-                         .from(".gsap-feature-card", { y: 30, opacity: 0, duration: 0.5, stagger: 0.1, ease: "back.out(1.2)" }, "-=0.3");
-
-                gsap.from("#step-line", {
-                    scaleX: 0, duration: 1.5, ease: "power2.inOut", scrollTrigger: { trigger: "#section-steps", start: "top 70%" }
-                });
-                gsap.from(".gsap-step", {
-                    y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)", scrollTrigger: { trigger: "#section-steps", start: "top 70%" }
-                });
-                gsap.from(".gsap-pulse-text", {
-                    x: -50, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#section-pulse", start: "top 60%" }
-                });
+                gsap.to("#marquee-track", { xPercent: -33.33, ease: "none", duration: 25, repeat: -1 });
+                
+                gsap.from("#step-line", { scaleX: 0, duration: 1.5, ease: "power2.inOut", scrollTrigger: { trigger: "#section-steps", start: "top 70%" }});
+                gsap.from(".gsap-step", { y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: "back.out(1.7)", scrollTrigger: { trigger: "#section-steps", start: "top 70%" }});
+                gsap.from(".gsap-pulse-text", { x: -50, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: "#section-pulse", start: "top 60%" }});
                 
                 const feedItems = gsap.utils.toArray(".gsap-feed-item");
                 feedItems.forEach((item, i) => {
-                    gsap.from(item, {
-                        x: 100, opacity: 0, rotationY: -15, duration: 0.8, delay: i * 0.1, ease: "power2.out",
-                        scrollTrigger: { trigger: "#feed-container", start: "top 80%" }
-                    });
+                    gsap.from(item, { x: 100, opacity: 0, rotationY: -15, duration: 0.8, delay: i * 0.1, ease: "power2.out", scrollTrigger: { trigger: "#feed-container", start: "top 80%" }});
                 });
 
-                gsap.from(".gsap-review-left", {
-                    x: -100, opacity: 0, duration: 1, ease: "power3.out",
-                    scrollTrigger: { trigger: ".gsap-review-left", start: "top 80%" }
-                });
-                gsap.from(".gsap-review-right", {
-                    x: 100, opacity: 0, duration: 1, ease: "power3.out",
-                    scrollTrigger: { trigger: ".gsap-review-right", start: "top 80%" }
-                });
-
-                gsap.from(".gsap-cta-content", {
-                    scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.7)",
-                    scrollTrigger: { trigger: ".gsap-cta-content", start: "top 80%" }
-                });
-
+                gsap.from(".gsap-review-left", { x: -100, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".gsap-review-left", start: "top 80%" }});
+                gsap.from(".gsap-review-right", { x: 100, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".gsap-review-right", start: "top 80%" }});
+                gsap.from(".gsap-cta-content", { scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.7)", scrollTrigger: { trigger: ".gsap-cta-content", start: "top 80%" }});
+                
                 // Initialize Lenis
                 if (typeof Lenis !== 'undefined') {
                     const lenis = new Lenis({
@@ -1070,19 +967,20 @@
             },
 
             updateUserHeader: () => {
-                const points = document.getElementById('user-points-display');
-                if (points) points.innerText = state.points;
+                const pDisplay = document.getElementById('user-points-display');
+                if(pDisplay) pDisplay.innerText = state.points;
                 
                 const avatar = document.getElementById('user-avatar');
                 if (avatar) {
                      if (state.user && state.user.avatar) {
                         avatar.innerHTML = `<img src="${state.user.avatar}" class="w-full h-full object-cover rounded-full">`;
                      } else {
-                        avatar.innerText = state.user ? state.user.name[0].toUpperCase() : 'U';
+                        avatar.innerText = state.user && state.user.name ? state.user.name[0].toUpperCase() : 'U';
                      }
                 }
             },
 
+            // Map Logic (Exposed to window for onclicks)
             selectBuilding: (id) => {
                 gsap.to("#main-content", {
                     opacity: 0, duration: 0.2, onComplete: () => {
@@ -1091,11 +989,10 @@
                     }
                 });
             },
-
             selectFloor: (floorNum) => { app.renderPins(1, floorNum); },
-            showAddPinModal: (bId, floor, x, y) => {
+            showAddPinModal: (bId, floor, x, y) => { 
                 const typesHTML = PIN_TYPES.map(t => `
-                    <button onclick="app.confirmAddPin('${t.type}', ${bId}, ${floor}, ${x}, ${y})" class="flex flex-col items-center gap-2 p-4 rounded-xl border border-slate-100 hover:border-indigo-500 hover:bg-indigo-50 transition-all group">
+                    <button onclick="window.app.confirmAddPin('${t.type}', ${bId}, ${floor}, ${x}, ${y})" class="flex flex-col items-center gap-2 p-3 rounded-xl border border-slate-100 hover:border-indigo-500 hover:bg-indigo-50 transition-all group w-full">
                         <div class="w-10 h-10 ${t.color} text-white rounded-lg flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform"><i data-lucide="${t.icon}" class="w-5 h-5"></i></div>
                         <span class="text-xs font-bold text-slate-600">${t.label}</span>
                     </button>`).join('');
@@ -1108,18 +1005,21 @@
                     </div>`;
                 window.currentModal = UI.modal(modalHTML);
             },
-
+            
             confirmAddPin: (type, bId, floor, x, y) => {
                 window.currentModal.close();
                 const newPin = { id: Date.now(), type, bId, floor, x, y, author: state.user.name };
                 state.pins.push(newPin);
                 app.addPoints(10);
-                saveState();
+                // In real app, save to Firestore here
                 app.renderPins(bId, floor);
                 UI.toast(`Report submitted successfully`);
             },
             addPoints: (amount) => {
-                state.points += amount; saveState();
+                state.points += amount; 
+                if(state.userId) {
+                     // Optimistic update, would sync to DB in background
+                }
                 gsap.to("#user-points-display", { innerText: state.points, duration: 1, snap: { innerText: 1 } });
             },
             renderPins: (bId, floor) => {
@@ -1131,7 +1031,7 @@
                     const pulseClass = p.type === 'guard' ? '<div class="absolute inset-0 bg-red-500 rounded-full pin-pulse"></div>' : '';
                     return `<div class="map-pin absolute transform -translate-x-1/2 -translate-y-1/2 cursor-pointer group z-20" style="left: ${p.x}%; top: ${p.y}%" onclick="UI.toast('${pType.label} report by ${p.author}')">
                              ${pulseClass}
-                             <div class="relative w-8 h-8 ${pType.color} text-white rounded-lg flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 transition-transform"><i data-lucide="${pType.icon}" class="w-4 h-4"></i></div>
+                             <div class="relative w-6 h-6 ${pType.color} text-white rounded-lg flex items-center justify-center shadow-lg border-2 border-white hover:scale-110 transition-transform"><i data-lucide="${pType.icon}" class="w-3 h-3"></i></div>
                         </div>`;
                 }).join('');
                 lucide.createIcons();
@@ -1139,7 +1039,9 @@
             }
         };
 
-        const router = {
+        // EXPOSE TO WINDOW for inline HTML onclick handlers
+        window.app = app;
+        window.router = {
             navigate: (view) => {
                 const dashboard = document.getElementById('dashboard-view');
                 const main = document.getElementById('main-content');
@@ -1148,6 +1050,7 @@
                     btn.classList.add('text-slate-400');
                 });
                 if(dashboard.classList.contains('hidden')) dashboard.classList.remove('hidden');
+                
                 if(view === 'map') renderMap();
                 else if(view === 'leaderboard') renderLeaderboard();
                 else if(view === 'profile') {
@@ -1157,7 +1060,126 @@
             }
         };
 
-        window.addEventListener('DOMContentLoaded', app.init);
+        // RENDER FUNCTIONS (Needs to be accessible to app logic)
+        const renderMap = () => {
+             const container = document.getElementById('main-content');
+            let buildingsHTML = BUILDINGS.map(b => `
+                <div class="building-card gsap-map-item group" style="grid-area: ${b.gridArea}" onclick="window.app.selectBuilding(${b.id})">
+                    <div class="w-8 h-8 md:w-12 md:h-12 ${b.color} rounded-xl md:rounded-2xl flex items-center justify-center mb-2 md:mb-3 group-hover:scale-110 transition-transform duration-300 shadow-sm">
+                        <i data-lucide="${b.icon}" class="w-4 h-4 md:w-6 md:h-6"></i>
+                    </div>
+                    <span class="text-[10px] md:text-xs font-bold text-slate-700 text-center leading-tight group-hover:text-primary transition-colors">${b.name}</span>
+                    <div class="absolute top-2 right-2 w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-emerald-500 animate-pulse border border-white"></div>
+                </div>
+            `).join('');
+            buildingsHTML += `<div class="waterfall-zone flex items-center justify-center flex-col text-white z-0" style="grid-area: 2 / 2 / 3 / 3"><div class="water-flow"></div><div class="relative z-10 font-bold text-center text-[8px] md:text-[10px] uppercase tracking-widest opacity-90 drop-shadow-md">Central<br>Fountain</div></div>`;
+            container.innerHTML = `<div class="w-full h-full flex flex-col"><div class="flex justify-between items-end mb-4 px-2"><div><h1 class="text-xl md:text-2xl font-bold text-slate-900 tracking-tight">Campus Overview</h1><p class="text-slate-500 text-xs md:text-sm font-medium">Select a zone to view floor plans</p></div></div><div class="flex-1 flex items-center justify-center py-4 overflow-auto"><div class="campus-grid relative">${buildingsHTML}<div class="absolute inset-0 bg-gradient-to-tr from-indigo-500/5 to-transparent rounded-full blur-3xl -z-10 scale-125 pointer-events-none"></div></div></div></div>`;
+            lucide.createIcons();
+            gsap.from(".gsap-map-item", { duration: 0.6, scale: 0.8, opacity: 0, stagger: 0.05, ease: "back.out(1.5)" });
+            gsap.from(".waterfall-zone", { duration: 1, scale: 0, delay: 0.2, ease: "elastic.out(1, 0.7)" });
+        };
+
+        const renderBuildingDetail = (buildingId) => {
+             const building = BUILDINGS.find(b => b.id === buildingId);
+             if (!building) return UI.toast("This zone is not accessible.", "error");
+             const container = document.getElementById('main-content');
+             // Simplified view for brevity
+             let floorsHTML = '';
+            for(let i=1; i<=building.floors; i++) {
+                floorsHTML += `<button onclick="window.app.selectFloor(${i})" class="flex-shrink-0 px-4 py-2 rounded-full font-semibold text-xs transition-all ${i === 1 ? 'bg-slate-900 text-white shadow-lg' : 'bg-white text-slate-500 border border-slate-200 hover:border-slate-400'}">Level ${i}</button>`;
+            }
+             container.innerHTML = `<div class="h-full flex flex-col"><div class="flex items-center gap-4 mb-4"><button onclick="window.router.navigate('map')" class="bg-white p-2 rounded-lg border border-slate-200 hover:border-slate-400 transition-colors shadow-sm"><i data-lucide="arrow-left" class="w-5 h-5 text-slate-700"></i></button><div><h2 class="text-lg md:text-xl font-bold text-slate-900 flex items-center gap-2">${building.name}</h2></div></div><div class="flex gap-2 overflow-x-auto no-scrollbar pb-4 mb-2">${floorsHTML}</div><div id="floor-map-container" class="flex-1 bg-white rounded-2xl border border-slate-200 relative overflow-hidden flex items-center justify-center text-slate-400 shadow-sm"><div class="absolute inset-0 bg-slate-50 bg-cover bg-center opacity-40" style="background-image: url('https://images.unsplash.com/photo-1497366216548-37526070297c?auto=format&fit=crop&w=800&q=80')"></div><div class="relative z-10 text-center"><p class="text-sm font-medium">Map View</p><p class="text-xs opacity-60">Tap to add pin</p></div><div id="pins-layer" class="absolute inset-0 w-full h-full z-20"></div></div></div>`;
+             lucide.createIcons();
+             
+             // Re-attach click listener for map container since innerHTML wiped it
+             setTimeout(() => {
+                const mapContainer = document.getElementById('floor-map-container');
+                if(mapContainer) {
+                    mapContainer.addEventListener('click', (e) => {
+                        if(e.target.closest('.map-pin')) return;
+                        const rect = mapContainer.getBoundingClientRect();
+                        const x = ((e.clientX - rect.left) / rect.width) * 100;
+                        const y = ((e.clientY - rect.top) / rect.height) * 100;
+                        window.app.showAddPinModal(buildingId, 1, x, y);
+                    });
+                }
+             }, 100);
+        };
+
+        const renderProfile = () => {
+             const container = document.getElementById('main-content');
+             const user = state.user || {};
+             const default_avatar = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+             container.innerHTML = `
+                <div class="w-full h-full flex flex-col overflow-y-auto pb-24">
+                    <div class="max-w-2xl mx-auto w-full bg-white rounded-2xl md:rounded-[2rem] shadow-sm md:shadow-xl border border-slate-100 overflow-hidden relative group">
+                        <div class="h-24 md:h-32 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden"></div>
+                        <div class="px-6 md:px-8 pb-8">
+                            <div class="relative -mt-10 md:-mt-12 mb-6 flex justify-between items-end">
+                                <div class="relative group/avatar">
+                                    <div class="w-20 h-20 md:w-28 md:h-28 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 relative">
+                                        <img id="profile-img-preview" src="${user.avatar || default_avatar}" class="w-full h-full object-cover" alt="Profile">
+                                        <label for="avatar-upload" id="avatar-overlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-opacity cursor-pointer ${user.isEditing ? 'opacity-100' : ''}" style="display: ${user.isEditing ? 'flex' : 'none'}"><i data-lucide="camera" class="w-6 h-6 md:w-8 md:h-8 text-white"></i></label>
+                                    </div>
+                                    <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="window.app.handleAvatarUpload(this)">
+                                </div>
+                                <button onclick="window.app.toggleEditMode()" id="edit-btn" class="px-4 py-2 md:px-5 md:py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-xs md:text-sm hover:bg-slate-200 transition-colors flex items-center gap-2"><i data-lucide="${user.isEditing ? 'x' : 'edit-2'}" class="w-3 h-3 md:w-4 md:h-4"></i>${user.isEditing ? 'Cancel' : 'Edit'}</button>
+                            </div>
+                            <div class="mb-6 md:mb-8"><h1 class="text-2xl md:text-3xl font-bold text-slate-900 mb-1">${user.name || 'Student'}</h1><p class="text-slate-500 font-medium text-sm flex items-center gap-2"><i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-500"></i>${user.branch || 'Presidency University'}</p></div>
+                            <form id="profile-form" onsubmit="window.app.saveProfile(event)" class="space-y-4 md:space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                                    <div class="space-y-1"><label class="profile-label">Nickname</label><input type="text" name="name" value="${user.name || ''}" class="profile-input text-sm" ${user.isEditing ? '' : 'disabled'}></div>
+                                    <div class="space-y-1"><label class="profile-label">Branch</label><input type="text" name="branch" value="${user.branch || ''}" placeholder="e.g. CS" class="profile-input text-sm" ${user.isEditing ? '' : 'disabled'}></div>
+                                    <div class="space-y-1"><label class="profile-label">Age</label><input type="number" name="age" value="${user.age || ''}" placeholder="18+" class="profile-input text-sm" ${user.isEditing ? '' : 'disabled'}></div>
+                                    <div class="space-y-1"><label class="profile-label">Contact</label><input type="text" name="contact" value="${user.contact || ''}" placeholder="Email" class="profile-input text-sm" ${user.isEditing ? '' : 'disabled'}></div>
+                                </div>
+                                <div class="space-y-1"><label class="profile-label">What I Love</label><textarea name="bio" rows="3" placeholder="..." class="profile-input text-sm resize-none" ${user.isEditing ? '' : 'disabled'}>${user.bio || ''}</textarea></div>
+                                <div id="save-actions" class="${user.isEditing ? 'block' : 'hidden'} pt-4"><button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3 rounded-xl shadow-lg hover:scale-[1.01] transition-all flex justify-center items-center gap-2 text-sm"><i data-lucide="save" class="w-4 h-4"></i> Save Changes</button></div>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="mt-8 text-center pb-8"><button onclick="window.app.logout()" class="text-slate-400 hover:text-red-500 text-sm font-semibold transition-colors flex items-center justify-center gap-2 mx-auto"><i data-lucide="log-out" class="w-4 h-4"></i> Sign Out</button></div>
+                </div>`;
+            lucide.createIcons();
+            gsap.from(".max-w-2xl", { y: 20, opacity: 0, duration: 0.5, ease: "power2.out" });
+        };
+        
+        const renderLeaderboard = () => {
+             document.getElementById('main-content').innerHTML = `
+                <div class="max-w-md mx-auto">
+                    <div class="text-center mb-8">
+                        <h1 class="text-2xl font-bold text-slate-900">Leaderboard</h1>
+                        <p class="text-slate-500 text-sm">Top contributors this week</p>
+                    </div>
+                    <div class="flex justify-center items-end gap-4 mb-12 px-4">
+                         <div class="flex flex-col items-center gap-2 w-1/3">
+                            <div class="w-12 h-12 rounded-full border-2 border-slate-300 shadow-md overflow-hidden bg-slate-100 podium-avatar rank-2 flex items-center justify-center font-bold text-slate-600 text-xs">RK</div>
+                            <div class="text-center"><div class="font-bold text-xs text-slate-900">Rahul</div><div class="text-[10px] text-slate-500">980 pts</div></div>
+                            <div class="w-full h-16 bg-gradient-to-t from-slate-200 to-slate-50 rounded-t-lg relative shadow-sm border-t border-white/50"><div class="absolute top-2 left-1/2 -translate-x-1/2 text-xl font-bold text-slate-400/30">2</div></div>
+                         </div>
+                         <div class="flex flex-col items-center gap-2 w-1/3">
+                            <div class="relative"><i data-lucide="crown" class="w-5 h-5 text-amber-400 absolute -top-3 left-1/2 -translate-x-1/2 fill-current"></i><div class="w-14 h-14 rounded-full border-2 border-amber-300 shadow-lg overflow-hidden bg-amber-50 podium-avatar rank-1 flex items-center justify-center font-bold text-amber-700 text-sm">SJ</div></div>
+                            <div class="text-center"><div class="font-bold text-xs text-slate-900">Sarah</div><div class="text-[10px] text-amber-600 font-bold">1250 pts</div></div>
+                            <div class="w-full h-24 bg-gradient-to-t from-amber-200 to-amber-50 rounded-t-lg relative shadow-md border-t border-white/50"><div class="absolute top-2 left-1/2 -translate-x-1/2 text-2xl font-bold text-amber-500/30">1</div></div>
+                         </div>
+                         <div class="flex flex-col items-center gap-2 w-1/3">
+                            <div class="w-12 h-12 rounded-full border-2 border-orange-300 shadow-md overflow-hidden bg-orange-50 podium-avatar rank-3 flex items-center justify-center font-bold text-orange-700 text-xs">MT</div>
+                            <div class="text-center"><div class="font-bold text-xs text-slate-900">Mike</div><div class="text-[10px] text-slate-500">850 pts</div></div>
+                            <div class="w-full h-12 bg-gradient-to-t from-orange-200 to-orange-50 rounded-t-lg relative shadow-sm border-t border-white/50"><div class="absolute top-2 left-1/2 -translate-x-1/2 text-xl font-bold text-orange-500/30">3</div></div>
+                         </div>
+                    </div>
+                    <div class="pb-24 space-y-3 px-2">
+                        <div class="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl shadow-sm"><div class="font-bold text-sm text-slate-400 w-6 text-center">4</div><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">JD</div><div class="flex-1 font-bold text-sm text-slate-700">John Doe</div><div class="text-xs font-bold text-slate-500">720 pts</div></div>
+                        <div class="flex items-center gap-4 p-3 bg-white border border-slate-100 rounded-xl shadow-sm"><div class="font-bold text-sm text-slate-400 w-6 text-center">5</div><div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center text-xs font-bold">AS</div><div class="flex-1 font-bold text-sm text-slate-700">Alice Smith</div><div class="text-xs font-bold text-slate-500">650 pts</div></div>
+                        <div class="flex items-center gap-4 p-3 bg-indigo-50 border border-indigo-200 rounded-xl shadow-sm mt-6"><div class="font-bold text-sm text-indigo-400 w-6 text-center">9</div><div class="w-8 h-8 rounded-full bg-white flex items-center justify-center text-xs font-bold text-primary">U</div><div class="flex-1 font-bold text-sm text-slate-900">You</div><div class="text-xs font-bold text-primary">${state.points} pts</div></div>
+                    </div>
+                </div>`;
+            lucide.createIcons();
+            gsap.from(".podium-avatar", { y: 20, opacity: 0, duration: 0.6, stagger: 0.1, ease: "back.out(1.5)" });
+        };
+
+        // Init call
+        app.init();
     </script>
 </body>
 </html>
