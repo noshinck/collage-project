@@ -128,22 +128,21 @@
 
         @keyframes flow { from { background-position: 0 0; } to { background-position: 0 30px; } }
 
-        /* Building Card Styles - Professional & Visible */
+        /* Building Card Styles */
         .building-card {
             background-color: #FFFFFF;
             border-radius: 1.25rem;
             position: relative;
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
-            border: 2px solid #E2E8F0; /* Stronger border */
+            border: 2px solid #E2E8F0;
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Deeper shadow */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
             z-index: 2;
-            /* Removed force opacity to let GSAP animate, added will-change for performance */
             will-change: transform, opacity;
         }
         
@@ -157,9 +156,41 @@
         .pin-pulse { animation: pulse-ring 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite; }
         @keyframes pulse-ring { 0% { transform: scale(0.33); opacity: 0.8; } 80%, 100% { transform: scale(2.5); opacity: 0; } }
 
-        /* Utility classes for GSAP */
         .gsap-reveal { opacity: 0; transform: translateY(20px); }
         .blueprint-grid { background-size: 40px 40px; }
+
+        /* Input Styling for Profile */
+        .profile-input {
+            width: 100%;
+            background-color: #F8FAFC;
+            border: 1px solid #E2E8F0;
+            border-radius: 0.75rem;
+            padding: 0.75rem 1rem;
+            font-weight: 600;
+            color: #1F2937;
+            transition: all 0.2s;
+        }
+        .profile-input:focus {
+            outline: none;
+            border-color: #4F46E5;
+            background-color: #FFFFFF;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+        .profile-input:disabled {
+            background-color: transparent;
+            border-color: transparent;
+            padding: 0.75rem 0;
+            color: #4B5563;
+        }
+        .profile-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: #94A3B8;
+            margin-bottom: 0.25rem;
+            display: block;
+        }
 
         /* Smooth Scrolling (Lenis) */
         html.lenis, html.lenis body { height: auto; }
@@ -174,12 +205,11 @@
     <div id="app" class="relative min-h-screen flex flex-col">
         
         <!-- ====================
-             VIEW: SPLASH SCREEN (UPDATED ANIMATION)
+             VIEW: SPLASH SCREEN
              ==================== -->
         <div id="splash-view" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center text-white origin-top">
             <div class="splash-logo mb-6 relative scale-0">
                 <div class="w-28 h-28 bg-white/10 backdrop-blur-md rounded-[2rem] flex items-center justify-center shadow-[0_0_60px_rgba(255,255,255,0.1)] border border-white/20">
-                    <!-- Spotty Logo -->
                     <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-20 h-20 object-contain drop-shadow-lg">
                 </div>
             </div>
@@ -199,7 +229,6 @@
             <nav class="sticky top-0 z-40 glass-panel border-b border-white/20">
                 <div class="container mx-auto px-6 h-20 flex justify-between items-center">
                     <div class="flex items-center gap-3">
-                        <!-- Spotty Logo (mix-blend-multiply to remove white bg visual) -->
                         <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-10 h-10 object-contain mix-blend-multiply">
                         <span class="font-bold text-2xl text-slate-900 tracking-tight">Spotty</span>
                     </div>
@@ -216,8 +245,6 @@
             <div class="flex-1 flex items-center justify-center relative overflow-hidden py-16 md:py-24">
                 <div class="container mx-auto px-6 relative z-10">
                     <div class="flex flex-col md:flex-row items-center gap-12 lg:gap-20">
-                        
-                        <!-- Left Content -->
                         <div class="md:w-1/2 text-center md:text-left">
                             <div class="gsap-reveal inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-50 border border-indigo-100 text-primary text-xs font-bold uppercase tracking-wider mb-6">
                                 <span class="w-2 h-2 rounded-full bg-primary animate-pulse"></span>
@@ -231,7 +258,6 @@
                                 The intelligent map for Presidency University. Locate guards, find empty study spots, and navigate complex building layouts with real-time community data.
                             </p>
                             
-                            <!-- Login Card -->
                             <div class="gsap-reveal bg-white p-2 rounded-2xl shadow-premium border border-slate-100 max-w-sm mx-auto md:mx-0">
                                 <form id="login-form" class="flex flex-col gap-2">
                                     <div class="relative group">
@@ -246,16 +272,11 @@
                             </div>
                         </div>
 
-                        <!-- Right Visual (Abstract Interface) -->
                         <div class="md:w-1/2 relative w-full max-w-lg">
                             <div class="gsap-reveal absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-full blur-[80px] -z-10"></div>
-                            
-                            <!-- Floating Glass Cards Mockup -->
                             <div class="relative min-h-[400px]">
-                                <!-- Back Card -->
                                 <div class="gsap-card absolute top-0 right-0 w-64 p-5 rounded-2xl glass-panel shadow-glass transform rotate-6 border-l-4 border-l-secondary/50 z-10">
                                     <div class="flex items-center gap-3 mb-3">
-                                        <!-- UPDATED: Profile Picture for Guard Alert -->
                                         <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=100&h=100" class="w-10 h-10 rounded-full border-2 border-white shadow-sm object-cover" alt="Guard">
                                         <div>
                                             <div class="text-xs font-bold text-slate-900">Guard Alert</div>
@@ -266,8 +287,6 @@
                                         <div class="h-full w-2/3 bg-primary rounded-full"></div>
                                     </div>
                                 </div>
-
-                                <!-- Front Card -->
                                 <div class="gsap-card absolute top-20 left-4 w-72 p-6 rounded-2xl bg-white shadow-premium border border-slate-100 z-20">
                                     <div class="flex justify-between items-start mb-6">
                                         <div>
@@ -279,18 +298,12 @@
                                     <div class="space-y-4">
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs">1</div>
-                                            <div class="flex-1">
-                                                <div class="h-2 w-24 bg-slate-100 rounded mb-1"></div>
-                                                <div class="h-2 w-16 bg-slate-50 rounded"></div>
-                                            </div>
+                                            <div class="flex-1"><div class="h-2 w-24 bg-slate-100 rounded mb-1"></div><div class="h-2 w-16 bg-slate-50 rounded"></div></div>
                                             <div class="text-xs font-bold text-primary">1,240 pts</div>
                                         </div>
                                         <div class="flex items-center gap-3">
                                             <div class="w-8 h-8 rounded-full bg-slate-100 flex items-center justify-center font-bold text-xs text-primary bg-indigo-50 border border-indigo-100">2</div>
-                                            <div class="flex-1">
-                                                <div class="h-2 w-20 bg-slate-200 rounded mb-1"></div>
-                                                <div class="h-2 w-12 bg-slate-100 rounded"></div>
-                                            </div>
+                                            <div class="flex-1"><div class="h-2 w-20 bg-slate-200 rounded mb-1"></div><div class="h-2 w-12 bg-slate-100 rounded"></div></div>
                                             <div class="text-xs font-bold text-slate-900">You</div>
                                         </div>
                                     </div>
@@ -328,8 +341,8 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Features (MATCHING REFERENCE STYLE) -->
-            <div id="features-section" class="py-24 bg-white relative overflow-hidden">
+            <!-- SECTION 2: Features (RESTORED) -->
+            <div id="features-section" class="py-24 bg-white relative overflow-hidden border-b border-slate-100">
                 <!-- Background Glow (Subtle) -->
                 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-slate-50/50 rounded-full blur-3xl -z-10"></div>
 
@@ -466,51 +479,6 @@
                 </div>
             </div>
 
-            <!-- SECTION 5: Testimonials -->
-            <div class="py-24 bg-white border-t border-slate-200">
-                <div class="container mx-auto px-6">
-                    <div class="text-center mb-16">
-                        <h2 class="text-3xl font-bold text-slate-900">Student Voices</h2>
-                    </div>
-                    <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                        <div class="gsap-review-left bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex gap-1 text-amber-400 mb-4">
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            </div>
-                            <p class="text-slate-600 italic mb-6">"Finally, I don't have to walk all the way to the canteen just to see it's full. This app saves me so much time between classes."</p>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-indigo-100 rounded-full flex items-center justify-center font-bold text-primary">R</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Rahul S.</h4>
-                                    <span class="text-xs text-slate-400">Computer Science, Year 3</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="gsap-review-right bg-white p-8 rounded-2xl shadow-sm border border-slate-100">
-                            <div class="flex gap-1 text-amber-400 mb-4">
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                                <i data-lucide="star" class="w-4 h-4 fill-current"></i>
-                            </div>
-                            <p class="text-slate-600 italic mb-6">"The guard tracking is a lifesaver when I'm running late. The interface is super clean and feels very professional."</p>
-                            <div class="flex items-center gap-3">
-                                <div class="w-10 h-10 bg-pink-100 rounded-full flex items-center justify-center font-bold text-pink-600">P</div>
-                                <div>
-                                    <h4 class="font-bold text-slate-900 text-sm">Priya M.</h4>
-                                    <span class="text-xs text-slate-400">Architecture, Year 2</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <!-- SECTION 6: CTA -->
             <div class="py-32 bg-slate-900 relative overflow-hidden flex items-center justify-center text-center">
                 <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
@@ -638,11 +606,15 @@
 
         // DATA CONFIG - UPDATED BUILDINGS TO MATCH MAP IMAGE
         const BUILDINGS = [
+            // Row 1
             { id: 1, name: 'School of Management', icon: 'briefcase', color: 'bg-indigo-100 text-indigo-600', floors: 4, gridArea: '1 / 1 / 2 / 2', img: 'photo-1555854877-bab0e564b8d5' },
             { id: 2, name: 'School of Law', icon: 'scale', color: 'bg-purple-100 text-purple-600', floors: 5, gridArea: '1 / 2 / 2 / 3', img: 'photo-1581094794329-c8112a89af12' },
             { id: 3, name: 'School of Engineering', icon: 'cpu', color: 'bg-blue-100 text-blue-600', floors: 6, gridArea: '1 / 3 / 2 / 4', img: 'photo-1481253127861-534498168948' },
+            // Row 2
             { id: 4, name: 'Auditorium', icon: 'mic-2', color: 'bg-rose-100 text-rose-600', floors: 2, gridArea: '2 / 1 / 3 / 2', img: 'photo-1517457373958-b7bdd4587205' },
+            { id: 9, name: 'Central Fountain', icon: 'droplets', color: 'bg-blue-100 text-blue-600', floors: 1, gridArea: '2 / 2 / 3 / 3' }, // Center
             { id: 5, name: 'Admission Office', icon: 'building', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4', img: 'photo-1555679427-1f6dfcce943b' },
+            // Row 3
             { id: 6, name: 'Cafeteria', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2', img: 'photo-1422015347944-9dd46d16bd0b' },
             { id: 7, name: 'Hostel Mess', icon: 'utensils', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3', img: 'photo-1503387762-592deb58ef4e' },
             { id: 8, name: 'Sports Field', icon: 'dumbbell', color: 'bg-teal-100 text-teal-600', floors: 1, gridArea: '3 / 3 / 4 / 4', img: 'photo-1534438327276-14e5300c3a48' },
@@ -743,7 +715,7 @@
             `).join('');
 
             buildingsHTML += `
-                <div class="waterfall-zone flex items-center justify-center flex-col text-white z-0">
+                <div class="waterfall-zone flex items-center justify-center flex-col text-white z-0" style="grid-area: 2 / 2 / 3 / 3">
                     <div class="water-flow"></div>
                     <div class="relative z-10 font-bold text-center text-[10px] uppercase tracking-widest opacity-90 drop-shadow-md">Central<br>Fountain</div>
                 </div>
@@ -783,10 +755,120 @@
             });
         };
 
+        const renderProfile = () => {
+            const container = document.getElementById('main-content');
+            const user = state.user || {};
+            const default_avatar = "https://cdn-icons-png.flaticon.com/512/3135/3135715.png";
+            
+            // Generate HTML for profile view
+            container.innerHTML = `
+                <div class="w-full h-full flex flex-col overflow-y-auto pb-24">
+                    <!-- Profile Card -->
+                    <div class="max-w-2xl mx-auto w-full bg-white rounded-[2rem] shadow-xl border border-slate-100 overflow-hidden relative group">
+                        
+                        <!-- Header Background -->
+                        <div class="h-32 bg-gradient-to-r from-indigo-600 to-purple-600 relative overflow-hidden">
+                            <div class="absolute inset-0 opacity-20 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                        </div>
+                        
+                        <div class="px-8 pb-8">
+                            <!-- Avatar Section -->
+                            <div class="relative -mt-12 mb-6 flex justify-between items-end">
+                                <div class="relative group/avatar">
+                                    <div class="w-28 h-28 rounded-full border-4 border-white shadow-lg overflow-hidden bg-slate-100 relative">
+                                        <img id="profile-img-preview" src="${user.avatar || default_avatar}" class="w-full h-full object-cover" alt="Profile">
+                                        <!-- Overlay for Edit Mode (Initially Hidden) -->
+                                        <label for="avatar-upload" id="avatar-overlay" class="absolute inset-0 bg-black/40 flex items-center justify-center opacity-0 transition-opacity cursor-pointer ${user.isEditing ? 'opacity-100' : ''}" style="display: ${user.isEditing ? 'flex' : 'none'}">
+                                            <i data-lucide="camera" class="w-8 h-8 text-white"></i>
+                                        </label>
+                                    </div>
+                                    <input type="file" id="avatar-upload" accept="image/*" class="hidden" onchange="app.handleAvatarUpload(this)">
+                                </div>
+                                
+                                <button onclick="app.toggleEditMode()" id="edit-btn" class="px-5 py-2.5 rounded-xl bg-slate-100 text-slate-600 font-bold text-sm hover:bg-slate-200 transition-colors flex items-center gap-2">
+                                    <i data-lucide="${user.isEditing ? 'x' : 'edit-2'}" class="w-4 h-4"></i>
+                                    ${user.isEditing ? 'Cancel' : 'Edit Profile'}
+                                </button>
+                            </div>
+
+                            <!-- User Identity -->
+                            <div class="mb-8">
+                                <h1 class="text-3xl font-bold text-slate-900 mb-1">${user.name || 'Student'}</h1>
+                                <p class="text-slate-500 font-medium flex items-center gap-2">
+                                    <i data-lucide="graduation-cap" class="w-4 h-4 text-indigo-500"></i>
+                                    ${user.branch || 'Presidency University'}
+                                </p>
+                            </div>
+
+                            <!-- Form Fields -->
+                            <form id="profile-form" onsubmit="app.saveProfile(event)" class="space-y-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                    <!-- Nickname -->
+                                    <div class="space-y-2">
+                                        <label class="profile-label">Nickname</label>
+                                        <input type="text" name="name" value="${user.name || ''}" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
+                                    </div>
+                                    
+                                    <!-- Branch -->
+                                    <div class="space-y-2">
+                                        <label class="profile-label">Branch / Major</label>
+                                        <input type="text" name="branch" value="${user.branch || ''}" placeholder="e.g. Computer Science" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
+                                    </div>
+
+                                    <!-- Age -->
+                                    <div class="space-y-2">
+                                        <label class="profile-label">Age</label>
+                                        <input type="number" name="age" value="${user.age || ''}" placeholder="18+" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
+                                    </div>
+
+                                    <!-- Contact -->
+                                    <div class="space-y-2">
+                                        <label class="profile-label">Contact (Email/Phone)</label>
+                                        <input type="text" name="contact" value="${user.contact || ''}" placeholder="student@presidency.edu" class="profile-input" ${user.isEditing ? '' : 'disabled'}>
+                                    </div>
+                                </div>
+
+                                <!-- Bio / What I Love -->
+                                <div class="space-y-2">
+                                    <label class="profile-label">What I Love <i data-lucide="heart" class="w-3 h-3 text-pink-500 inline fill-current"></i></label>
+                                    <textarea name="bio" rows="3" placeholder="Coding, Coffee, and Campus Walks..." class="profile-input resize-none" ${user.isEditing ? '' : 'disabled'}>${user.bio || ''}</textarea>
+                                </div>
+
+                                <!-- Save Button (Only visible in Edit Mode) -->
+                                <div id="save-actions" class="${user.isEditing ? 'block' : 'hidden'} pt-4">
+                                    <button type="submit" class="w-full bg-indigo-600 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-indigo-200 hover:shadow-indigo-300 hover:scale-[1.01] transition-all flex justify-center items-center gap-2">
+                                        <i data-lucide="save" class="w-4 h-4"></i> Save Changes
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+                    <!-- Logout Zone -->
+                    <div class="mt-8 text-center">
+                        <button onclick="app.logout()" class="text-slate-400 hover:text-red-500 text-sm font-semibold transition-colors flex items-center justify-center gap-2 mx-auto">
+                            <i data-lucide="log-out" class="w-4 h-4"></i> Sign Out
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            lucide.createIcons();
+            
+            // Animation for entrance
+            gsap.from(".max-w-2xl", {
+                y: 20, opacity: 0, duration: 0.5, ease: "power2.out"
+            });
+        };
+
         const renderBuildingDetail = (buildingId) => {
             const building = BUILDINGS.find(b => b.id === buildingId);
+            // Handle undefined building just in case (e.g. Fountain)
+            if (!building) {
+                 return UI.toast("This zone is not accessible.", "error");
+            }
+            
             const container = document.getElementById('main-content');
-            const bgImage = `https://images.unsplash.com/${building.img}?q=80&w=1200&auto=format&fit=crop`;
             
             let floorsHTML = '';
             for(let i=1; i<=building.floors; i++) {
@@ -820,7 +902,7 @@
                         
                         <!-- Real Map Image Background -->
                         <div class="absolute inset-0 bg-slate-100 bg-cover bg-center opacity-90 grayscale-[0.2]" 
-                             style="background-image: url('${bgImage}');">
+                             style="background-image: url('${building.img ? "https://images.unsplash.com/" + building.img + "?q=80&w=1200&auto=format&fit=crop" : ""}');">
                         </div>
                         
                         <!-- Blueprint Grid Overlay -->
@@ -920,7 +1002,7 @@
                     const username = document.getElementById('username-input').value;
                     if(username.length < 3) return UI.toast('Please enter a valid ID', 'error');
                     
-                    state.user = { name: username, id: Date.now().toString() };
+                    state.user = { name: username, id: Date.now().toString(), isEditing: false };
                     saveState();
                     
                     const authView = document.getElementById('auth-view');
@@ -933,6 +1015,46 @@
                         }
                     });
                 });
+            },
+
+            // PROFILE: Toggle Edit Mode
+            toggleEditMode: () => {
+                state.user.isEditing = !state.user.isEditing;
+                saveState();
+                renderProfile(); // Re-render to update UI state
+            },
+
+            // PROFILE: Handle Avatar Upload
+            handleAvatarUpload: (input) => {
+                if (input.files && input.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        state.user.avatar = e.target.result;
+                        saveState();
+                        // Update image immediately without full re-render
+                        document.getElementById('profile-img-preview').src = e.target.result;
+                        UI.toast("Profile picture updated!");
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            },
+
+            // PROFILE: Save Changes
+            saveProfile: (e) => {
+                e.preventDefault();
+                const formData = new FormData(e.target);
+                
+                state.user.name = formData.get('name');
+                state.user.age = formData.get('age');
+                state.user.branch = formData.get('branch');
+                state.user.contact = formData.get('contact');
+                state.user.bio = formData.get('bio');
+                state.user.isEditing = false; // Exit edit mode
+                
+                saveState();
+                renderProfile();
+                app.updateUserHeader();
+                UI.toast("Profile updated successfully!");
             },
 
             // NEW: Logout Function
@@ -1052,8 +1174,17 @@
             },
 
             updateUserHeader: () => {
-                document.getElementById('user-points-display').innerText = state.points;
-                document.getElementById('user-avatar').innerText = state.user.name[0].toUpperCase();
+                const points = document.getElementById('user-points-display');
+                if (points) points.innerText = state.points;
+                
+                const avatar = document.getElementById('user-avatar');
+                if (avatar) {
+                     if (state.user && state.user.avatar) {
+                        avatar.innerHTML = `<img src="${state.user.avatar}" class="w-full h-full object-cover rounded-full">`;
+                     } else {
+                        avatar.innerText = state.user ? state.user.name[0].toUpperCase() : 'U';
+                     }
+                }
             },
 
             selectBuilding: (id) => {
@@ -1152,7 +1283,7 @@
                 if(view === 'map') renderMap();
                 else if(view === 'leaderboard') renderLeaderboard();
                 else if(view === 'profile') {
-                    main.innerHTML = `<div class="flex h-full items-center justify-center text-slate-400 flex-col"><i data-lucide="cone" class="w-12 h-12 mb-4"></i><span>Profile Settings</span><button class="mt-4 text-red-500 text-sm font-bold" onclick="localStorage.clear(); location.reload()">Reset Local Data</button></div>`;
+                    renderProfile();
                     lucide.createIcons();
                 }
             }
