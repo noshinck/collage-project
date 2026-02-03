@@ -142,7 +142,7 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Deeper shadow */
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
             z-index: 2;
             will-change: transform, opacity;
         }
@@ -192,6 +192,14 @@
             margin-bottom: 0.25rem;
             display: block;
         }
+
+        /* Leaderboard Specifics */
+        .podium-avatar {
+            box-shadow: 0 0 0 4px #ffffff, 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        .rank-1 { background: linear-gradient(135deg, #FCD34D 0%, #F59E0B 100%); } /* Gold */
+        .rank-2 { background: linear-gradient(135deg, #E2E8F0 0%, #94A3B8 100%); } /* Silver */
+        .rank-3 { background: linear-gradient(135deg, #FDBA74 0%, #EA580C 100%); } /* Bronze */
 
         /* Smooth Scrolling (Lenis) */
         html.lenis, html.lenis body { height: auto; }
@@ -362,8 +370,6 @@
                      </div>
                 </div>
             </div>
-
-            <!-- SECTION 2: Features (REMOVED AS REQUESTED) -->
 
             <!-- SECTION 3: How It Works -->
             <div class="py-24 relative overflow-hidden bg-white" id="section-steps">
@@ -712,8 +718,8 @@
                     if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
                         await signInWithCustomToken(auth, __initial_auth_token);
                     } else {
-                        // Ensure auth is ready for profile check, but don't force login UI state until confirmed
-                         await signInAnonymously(auth);
+                        // We do NOT sign in anonymously automatically at start. 
+                        // User must click "Launch App" or "Login" to trigger sign-in.
                     }
                 };
                 await initAuth();
@@ -783,6 +789,9 @@
                 await setDoc(profileRef, userData, { merge: true });
                 state.user = userData;
                 state.userId = uid;
+
+                // Close modal if open
+                // (Assuming modal logic from previous steps, though simplified here since Section 2 was removed)
 
                 // 3. Animate Transition
                 const authView = document.getElementById('auth-view');
@@ -966,6 +975,13 @@
         };
 
         // RENDER FUNCTIONS (Needs to be accessible to app logic)
+        // ... (We define these outside app but use them inside) ...
+        // Note: For brevity in this fix, I am including them in global scope or ensuring app can call them.
+        
+        // ... [Insert RenderMap, RenderProfile, RenderLeaderboard functions here exactly as before] ...
+        // For the sake of the single file, they are just functions in the module scope.
+        
+        // --- Re-declaring Render Functions for Module Scope ---
         const renderMap = () => {
              const container = document.getElementById('main-content');
             let buildingsHTML = BUILDINGS.map(b => `
