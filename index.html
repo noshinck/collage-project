@@ -111,6 +111,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            aspect-ratio: 1 / 1; /* Ensures perfect circle */
         }
         
         .water-flow {
@@ -135,13 +136,13 @@
             position: relative;
             transition: transform 0.2s ease-out, box-shadow 0.2s ease-out;
             cursor: pointer;
-            border: 2px solid #E2E8F0;
+            border: 2px solid #E2E8F0; /* Stronger border */
             overflow: hidden;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04); /* Deeper shadow */
             z-index: 2;
             will-change: transform, opacity;
         }
@@ -210,6 +211,7 @@
         <div id="splash-view" class="fixed inset-0 bg-slate-950 z-[100] flex flex-col items-center justify-center text-white origin-top">
             <div class="splash-logo mb-6 relative scale-0">
                 <div class="w-28 h-28 bg-white/10 backdrop-blur-md rounded-[2rem] flex items-center justify-center shadow-[0_0_60px_rgba(255,255,255,0.1)] border border-white/20">
+                    <!-- Spotty Logo -->
                     <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-20 h-20 object-contain drop-shadow-lg">
                 </div>
             </div>
@@ -229,6 +231,7 @@
             <nav class="sticky top-0 z-40 glass-panel border-b border-white/20">
                 <div class="container mx-auto px-6 h-20 flex justify-between items-center">
                     <div class="flex items-center gap-3">
+                        <!-- Spotty Logo (mix-blend-multiply to remove white bg visual) -->
                         <img src="https://cdn-icons-png.flaticon.com/512/2829/2829818.png" alt="Spotty Logo" class="w-10 h-10 object-contain mix-blend-multiply">
                         <span class="font-bold text-2xl text-slate-900 tracking-tight">Spotty</span>
                     </div>
@@ -341,54 +344,7 @@
                 </div>
             </div>
 
-            <!-- SECTION 2: Features (RESTORED) -->
-            <div id="features-section" class="py-24 bg-white relative overflow-hidden border-b border-slate-100">
-                <!-- Background Glow (Subtle) -->
-                <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-3xl h-full bg-slate-50/50 rounded-full blur-3xl -z-10"></div>
-
-                <div class="container mx-auto px-6 relative z-10">
-                    <!-- Header -->
-                    <div class="text-center max-w-2xl mx-auto mb-16">
-                        <div class="gsap-feature-header inline-flex items-center px-4 py-1.5 rounded-full bg-white border border-slate-200 shadow-sm text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-6">
-                            Power Features
-                        </div>
-                        <h2 class="gsap-feature-header text-4xl md:text-5xl font-extrabold text-slate-900 leading-tight mb-2">
-                            Smart navigation for <br/> 
-                            <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-purple-600">smart students.</span>
-                        </h2>
-                    </div>
-
-                    <!-- Cards Grid -->
-                    <div class="grid md:grid-cols-3 gap-6">
-                        <!-- Card 1 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
-                            <div class="w-16 h-16 mx-auto bg-indigo-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                <span class="text-2xl text-indigo-600">📍</span>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-3">Real-Time Tracking</h3>
-                            <p class="text-slate-500 font-medium leading-relaxed text-sm">See guard locations instantly</p>
-                        </div>
-
-                        <!-- Card 2 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
-                            <div class="w-16 h-16 mx-auto bg-amber-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                <span class="text-2xl text-amber-500">🏆</span>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-3">Earn Rewards</h3>
-                            <p class="text-slate-500 font-medium leading-relaxed text-sm">Climb leaderboards, unlock badges</p>
-                        </div>
-
-                        <!-- Card 3 -->
-                        <div class="gsap-feature-card group bg-white rounded-[2rem] p-8 border border-slate-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300 hover:-translate-y-1 text-center">
-                            <div class="w-16 h-16 mx-auto bg-emerald-50 rounded-full flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                                <span class="text-2xl text-emerald-600">👥</span>
-                            </div>
-                            <h3 class="text-xl font-bold text-slate-900 mb-3">Community Powered</h3>
-                            <p class="text-slate-500 font-medium leading-relaxed text-sm">Everyone contributes, everyone benefits</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <!-- SECTION 2: Features (REMOVED) -->
 
             <!-- SECTION 3: How It Works -->
             <div class="py-24 relative overflow-hidden bg-white" id="section-steps">
@@ -629,19 +585,14 @@
             { type: 'event', label: 'Event', icon: 'star', color: 'bg-violet-500', text: 'text-violet-500' }
         ];
 
-        // SEED DATA: Default Security Guards - UPDATED
+        // SEED DATA
         const SEED_PINS = [
-            // Guard at School of Management (Top Left)
             { id: 'g1', type: 'guard', bId: 1, floor: 1, x: 20, y: 80, author: 'Admin', timestamp: Date.now() },
-            // Guard at School of Law (Top Center)
             { id: 'g2', type: 'guard', bId: 2, floor: 1, x: 50, y: 90, author: 'Admin', timestamp: Date.now() },
-            // Guard at Main Entrance/Parking (Near Hostel Mess area)
             { id: 'g3', type: 'guard', bId: 7, floor: 1, x: 50, y: 20, author: 'Admin', timestamp: Date.now() },
-            // Info desk at Admission Office
             { id: 'g5', type: 'info', bId: 5, floor: 1, x: 50, y: 50, author: 'Admin', timestamp: Date.now() }, 
         ];
 
-        // STATE MANAGEMENT
         const state = {
             user: JSON.parse(localStorage.getItem('campusNavUser')) || null,
             pins: JSON.parse(localStorage.getItem('campusNavPins')) || SEED_PINS,
@@ -654,18 +605,14 @@
             localStorage.setItem('campusNavPoints', state.points.toString());
         };
 
-        // UI HELPERS
         const UI = {
             toast: (message, type = 'success') => {
                 const container = document.getElementById('toast-container');
                 const el = document.createElement('div');
                 const borderClass = type === 'error' ? 'border-l-red-500' : 'border-l-emerald-500';
-                
                 el.className = `glass-panel pl-4 pr-6 py-3 rounded-lg shadow-lg border-l-4 ${borderClass} flex items-center gap-3 transform translate-x-full opacity-0 transition-all duration-500`;
                 el.innerHTML = `<span class="font-medium text-sm text-slate-800">${message}</span>`;
-                
                 container.appendChild(el);
-                
                 requestAnimationFrame(() => el.classList.remove('translate-x-full', 'opacity-0'));
                 setTimeout(() => {
                     el.classList.add('translate-x-full', 'opacity-0');
@@ -1174,17 +1121,8 @@
             },
 
             updateUserHeader: () => {
-                const points = document.getElementById('user-points-display');
-                if (points) points.innerText = state.points;
-                
-                const avatar = document.getElementById('user-avatar');
-                if (avatar) {
-                     if (state.user && state.user.avatar) {
-                        avatar.innerHTML = `<img src="${state.user.avatar}" class="w-full h-full object-cover rounded-full">`;
-                     } else {
-                        avatar.innerText = state.user ? state.user.name[0].toUpperCase() : 'U';
-                     }
-                }
+                document.getElementById('user-points-display').innerText = state.points;
+                document.getElementById('user-avatar').innerText = state.user.name[0].toUpperCase();
             },
 
             selectBuilding: (id) => {
