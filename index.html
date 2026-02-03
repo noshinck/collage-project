@@ -282,6 +282,7 @@
                     
                     <!-- Desktop Menu -->
                     <div class="hidden md:flex gap-8 text-sm font-medium text-slate-600 items-center">
+                        <a href="#" class="hover:text-primary transition-colors">Features</a>
                         <a href="#" class="hover:text-primary transition-colors">How it Works</a>
                         <a href="#" class="hover:text-primary transition-colors">Reviews</a>
                         <!-- Login Option calls Modal -->
@@ -430,6 +431,8 @@
                      </div>
                 </div>
             </div>
+
+            <!-- SECTION 2: Features (REMOVED) -->
 
             <!-- SECTION 3: How It Works -->
             <div class="py-16 md:py-24 relative overflow-hidden bg-white" id="section-steps">
@@ -682,27 +685,38 @@
 
     <!-- MAIN SCRIPT (Module Type) -->
     <script type="module">
+        // Using localStorage fallback if no firebase config provided for demo purposes
+        // To use real firebase, uncomment imports and setup config
+        /*
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
         import { getAuth, signInAnonymously, signOut, onAuthStateChanged, signInWithCustomToken } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        */
 
         gsap.registerPlugin(ScrollTrigger);
 
+        /* // --- FIREBASE SETUP ---
         const firebaseConfig = JSON.parse(__firebase_config);
         const firebaseApp = initializeApp(firebaseConfig);
         const auth = getAuth(firebaseApp);
         const db = getFirestore(firebaseApp);
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        */
+        
+        // Mock Auth/DB for Vercel Demo (Swap with real firebase above for production)
+        const mockAuth = { currentUser: null };
+        const mockDb = {};
 
+        // --- CONSTANTS ---
         const BUILDINGS = [
             { id: 1, name: 'School of Management', icon: 'briefcase', color: 'bg-indigo-100 text-indigo-600', floors: 4, gridArea: '1 / 1 / 2 / 2' },
             { id: 2, name: 'School of Law', icon: 'scale', color: 'bg-purple-100 text-purple-600', floors: 5, gridArea: '1 / 2 / 2 / 3' },
             { id: 3, name: 'School of Engineering', icon: 'cpu', color: 'bg-blue-100 text-blue-600', floors: 6, gridArea: '1 / 3 / 2 / 4' },
             { id: 4, name: 'Auditorium', icon: 'mic-2', color: 'bg-rose-100 text-rose-600', floors: 2, gridArea: '2 / 1 / 3 / 2' },
-            { id: 9, name: 'Central Fountain', icon: 'droplets', color: 'bg-blue-100 text-blue-600', floors: 1, gridArea: '2 / 2 / 3 / 3' },
+            { id: 9, name: 'Central Fountain', icon: 'droplets', color: 'bg-blue-100 text-blue-600', floors: 1, gridArea: '2 / 2 / 3 / 3' }, // Center
             { id: 5, name: 'Admission Office', icon: 'building', color: 'bg-amber-100 text-amber-600', floors: 3, gridArea: '2 / 3 / 3 / 4' },
-            { id: 6, name: 'Cafeteria', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2' },
-            { id: 7, name: 'Hostel', icon: 'home', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3' },
+            { id: 6, name: 'Cafeteria & Hostel', icon: 'coffee', color: 'bg-orange-100 text-orange-600', floors: 1, gridArea: '3 / 1 / 4 / 2' },
+            { id: 7, name: 'Hostel Mess', icon: 'utensils', color: 'bg-emerald-100 text-emerald-600', floors: 2, gridArea: '3 / 2 / 4 / 3' },
             { id: 8, name: 'Sports Field', icon: 'dumbbell', color: 'bg-teal-100 text-teal-600', floors: 1, gridArea: '3 / 3 / 4 / 4' },
         ];
 
@@ -715,13 +729,20 @@
             { type: 'event', label: 'Event', icon: 'star', color: 'bg-violet-500', text: 'text-violet-500' }
         ];
 
+        // --- APP STATE ---
         const state = {
-            user: null,
-            pins: [],
-            points: 0,
+            user: JSON.parse(localStorage.getItem('campusNavUser')) || null,
+            pins: [], // Fetched from DB later
+            points: parseInt(localStorage.getItem('campusNavPoints')) || 0,
             userId: null
         };
 
+        const saveState = () => {
+            if (state.user) localStorage.setItem('campusNavUser', JSON.stringify(state.user));
+            localStorage.setItem('campusNavPoints', state.points.toString());
+        };
+
+        // --- UI HELPERS ---
         const UI = {
             toast: (message, type = 'success') => {
                 const container = document.getElementById('toast-container');
@@ -758,63 +779,36 @@
             }
         };
 
+        // --- CORE APPLICATION LOGIC ---
         const app = {
             init: async () => {
-                const initAuth = async () => {
-                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                        await signInWithCustomToken(auth, __initial_auth_token);
+                // Mock Auth Logic (Replace with Firebase logic if config available)
+                setTimeout(() => {
+                    document.getElementById('splash-view').classList.add('hidden');
+                    if (state.user) {
+                        router.navigate('map');
+                        app.updateUserHeader();
                     } else {
-                        await signInAnonymously(auth);
+                        document.getElementById('auth-view').classList.remove('hidden');
+                        app.initLandingAnimations();
                     }
-                };
-                await initAuth();
+                }, 800);
 
-                onAuthStateChanged(auth, async (user) => {
-                    if (user) {
-                        state.userId = user.uid;
-                        const profileRef = doc(db, 'artifacts', appId, 'users', user.uid, 'profile', 'data');
-                        const profileSnap = await getDoc(profileRef);
-                        
-                        if (profileSnap.exists()) {
-                            state.user = profileSnap.data();
-                            if (state.user.points) {
-                                state.points = state.user.points;
-                            }
-                            document.getElementById('splash-view').classList.add('hidden');
-                            document.getElementById('auth-view').classList.add('hidden');
-                            router.navigate('map');
-                            app.updateUserHeader();
-                        } else {
-                             document.getElementById('splash-view').classList.add('hidden');
-                             document.getElementById('auth-view').classList.remove('hidden');
-                             app.initLandingAnimations();
-                        }
-                    } else {
-                        setTimeout(() => {
-                             document.getElementById('splash-view').classList.add('hidden');
-                             document.getElementById('auth-view').classList.remove('hidden');
-                             app.initLandingAnimations();
-                        }, 800);
-                    }
-                });
-
+                // Attach Handlers
                 const loginForm = document.getElementById('login-form');
                 if(loginForm) {
                     loginForm.addEventListener('submit', (e) => app.processLogin(e, 'username-input'));
                 }
             },
 
+            // LOGIN: Process Login Logic
             processLogin: async (e, inputId) => {
                 e.preventDefault();
                 const username = document.getElementById(inputId).value;
                 if(username.length < 3) return UI.toast('Please enter a valid nickname', 'error');
                 
-                if (!auth.currentUser) {
-                        await signInAnonymously(auth);
-                }
-                
-                const uid = auth.currentUser.uid;
-                const profileRef = doc(db, 'artifacts', appId, 'users', uid, 'profile', 'data');
+                // Mock Sign In
+                const uid = 'user-' + Date.now();
                 const userData = { 
                     name: username, 
                     id: uid, 
@@ -822,12 +816,13 @@
                     isEditing: false
                 };
                 
-                await setDoc(profileRef, userData, { merge: true });
                 state.user = userData;
                 state.userId = uid;
+                saveState();
 
                 app.toggleLoginModal(false);
 
+                // 3. Animate Transition
                 const authView = document.getElementById('auth-view');
                 gsap.to(authView, {
                     y: -20, opacity: 0, duration: 0.6, ease: "power3.in",
@@ -839,6 +834,7 @@
                 });
             },
 
+            // LANDING: Handle Profile Click
             handleLandingProfileClick: (e) => {
                 if (e) e.preventDefault();
                 app.toggleLoginModal(true);
@@ -872,9 +868,9 @@
             },
 
             logout: async () => {
-                await signOut(auth);
                 state.user = null;
                 state.userId = null;
+                localStorage.removeItem('campusNavUser');
                 
                 const dashboard = document.getElementById('dashboard-view');
                 const authView = document.getElementById('auth-view');
@@ -899,24 +895,26 @@
                 state.user.isEditing = !state.user.isEditing;
                 renderProfile(); 
             },
+
+            // PROFILE: Handle Avatar Upload
             handleAvatarUpload: (input) => {
                 if (input.files && input.files[0]) {
                     const reader = new FileReader();
                     reader.onload = async (e) => {
                         state.user.avatar = e.target.result;
-                        if(state.userId) {
-                             const profileRef = doc(db, 'artifacts', appId, 'users', state.userId, 'profile', 'data');
-                             await setDoc(profileRef, { avatar: e.target.result }, { merge: true });
-                        }
+                        saveState();
                         document.getElementById('profile-img-preview').src = e.target.result;
                         UI.toast("Profile picture updated!");
                     };
                     reader.readAsDataURL(input.files[0]);
                 }
             },
+
+            // PROFILE: Save Changes
             saveProfile: async (e) => {
                 e.preventDefault();
                 const formData = new FormData(e.target);
+                
                 const updates = {
                     name: formData.get('name'),
                     age: formData.get('age'),
@@ -925,16 +923,16 @@
                     bio: formData.get('bio'),
                     isEditing: false
                 };
+                
                 state.user = { ...state.user, ...updates };
-                if (state.userId) {
-                    const profileRef = doc(db, 'artifacts', appId, 'users', state.userId, 'profile', 'data');
-                    await setDoc(profileRef, updates, { merge: true });
-                }
+                saveState();
+
                 renderProfile();
                 app.updateUserHeader();
                 UI.toast("Profile updated successfully!");
             },
 
+            // ... (Animations and Map logic remain similar, adjusted for module scope) ...
             initLandingAnimations: () => {
                 const tl = gsap.timeline();
                 tl.to(".gsap-reveal", { y: 0, opacity: 1, duration: 1, stagger: 0.1, ease: "power3.out" })
@@ -953,8 +951,8 @@
                 gsap.from(".gsap-review-left", { x: -100, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".gsap-review-left", start: "top 80%" }});
                 gsap.from(".gsap-review-right", { x: 100, opacity: 0, duration: 1, ease: "power3.out", scrollTrigger: { trigger: ".gsap-review-right", start: "top 80%" }});
                 gsap.from(".gsap-cta-content", { scale: 0.8, opacity: 0, duration: 1, ease: "elastic.out(1, 0.7)", scrollTrigger: { trigger: ".gsap-cta-content", start: "top 80%" }});
-                
-                // Initialize Lenis
+
+                // Initialize Lenis for smooth scrolling
                 if (typeof Lenis !== 'undefined') {
                     const lenis = new Lenis({
                         duration: 1.2, easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
@@ -1011,15 +1009,11 @@
                 const newPin = { id: Date.now(), type, bId, floor, x, y, author: state.user.name };
                 state.pins.push(newPin);
                 app.addPoints(10);
-                // In real app, save to Firestore here
                 app.renderPins(bId, floor);
                 UI.toast(`Report submitted successfully`);
             },
             addPoints: (amount) => {
-                state.points += amount; 
-                if(state.userId) {
-                     // Optimistic update, would sync to DB in background
-                }
+                state.points += amount; saveState();
                 gsap.to("#user-points-display", { innerText: state.points, duration: 1, snap: { innerText: 1 } });
             },
             renderPins: (bId, floor) => {
